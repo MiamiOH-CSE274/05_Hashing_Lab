@@ -1,3 +1,6 @@
+Author
+==========
+Andy Shear, shearar
 05_Hashing_Lab
 ==============
 
