@@ -1,3 +1,6 @@
+Author
+==========
+Bo Brinkman, brinkmwj
 05_Hashing_Lab
 ==============
 
