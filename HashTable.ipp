@@ -1,47 +1,84 @@
-//You will need this so you can make a string to throw in
-// remove
-#include <string>
+
+//unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+
+
+
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+	backingArraySize = 53;
+	backingArray = new HashRecord[backingArraySize];
+	numItems = 0;
+	numRemoved = 0;
 }
 
 template <class Key, class T>
-HashTable<Key,T>::~HashTable() {
-  //TODO
-}
-
-template <class Key, class T>
-void HashTable<Key,T>::add(Key k, T x){
-  //TODO
-}
-
-template <class Key, class T>
-void HashTable<Key,T>::remove(Key k){
-  //TODO
-}
-
-template <class Key, class T>
-T HashTable<Key,T>::find(Key k){
-  //TODO
-  T dummy;
-  return dummy;
-}
-
-template <class Key, class T>
-bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
-  return false;
+HashTable<Key,T>::~HashTable(){
+	delete [] backingArray;
 }
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
-  return 0;
+	return numItems;
+}
+
+template <class Key, class T>
+void HashTable<Key,T>::add(Key k, T x){
+	if(numItems + numRemoved >= backingArraySize/2){
+		grow();
+	}
+
+	unsigned long hashed = hash(k);
+	while(!backingArray[hashed].isNull){
+		hashed = (hashed+1)%backingArraySize;
+	}
+	backingArray[hashed].x = x;
+	backingArray[hashed].isNull = false;
+	numItems++;
+}
+
+template <class Key, class T>
+void HashTable<Key,T>::remove(Key k){
+	if(!keyExists(k))
+		return;
+	backingArray[hash(k)].isDel = true;
+	backingArray[hash(k)].isNull = false;
+	numItems--;
+	numRemoved++;
+}
+
+template <class Key, class T>
+T HashTable<Key,T>::find(Key k){
+	T item = backingArray[hash(k)].x;
+	if(!keyExists(k))
+		throw std::string("No such item");
+	return item;
+}
+
+template <class Key, class T>
+bool HashTable<Key,T>::keyExists(Key k){
+	if(backingArray[hash(k)].isNull || backingArray[hash(k)].isDel)
+		return false;
+	return true;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-  //TODO
+	int prime = 0;
+	for(int i=0;i<=25;i++){
+		if(hashPrimes[i] == backingArraySize){
+			prime = hashPrimes[i+1];
+			break;
+		}
+	}
+
+	HashRecord* tmp = new HashRecord[prime];
+
+	for(int j=0;j<prime;j++){
+		if(!backingArray[j].isNull || !backingArray[j].isDel){
+			add(backingArray[j].k,backingArray[j].x);
+		}
+	}
+	delete [] backingArray;
+	backingArray = tmp;
 }
