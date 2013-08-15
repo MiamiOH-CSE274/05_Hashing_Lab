@@ -29,10 +29,12 @@ void HashTable<Key,T>::add(Key k, T x){
 	}
 
 	unsigned long hashed = hash(k);
+	
 	while(!backingArray[hashed].isNull){
 		hashed = (hashed+1)%backingArraySize;
 	}
 	backingArray[hashed].x = x;
+	backingArray[hashed].k = k;
 	backingArray[hashed].isNull = false;
 	numItems++;
 }
@@ -65,20 +67,26 @@ bool HashTable<Key,T>::keyExists(Key k){
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
 	int prime = 0;
+	int oldPrime = 0;
 	for(int i=0;i<=25;i++){
 		if(hashPrimes[i] == backingArraySize){
+			oldPrime = hashPrimes[i];
 			prime = hashPrimes[i+1];
 			break;
 		}
 	}
 
-	HashRecord* tmp = new HashRecord[prime];
+	HashRecord* tmp = backingArray;
+	backingArraySize = prime;
+	backingArray = new HashRecord[backingArraySize];
+	numItems = 0;
+	numRemoved = 0;
 
-	for(int j=0;j<prime;j++){
-		if(!backingArray[j].isNull || !backingArray[j].isDel){
-			add(backingArray[j].k,backingArray[j].x);
+	for(int j=0;j<oldPrime;j++){
+		if(!tmp[j].isNull && !tmp[j].isDel){
+			add(tmp[j].k,tmp[j].x);
 		}
 	}
-	delete [] backingArray;
-	backingArray = tmp;
+	delete [] tmp;
+	
 }
