@@ -11,3 +11,17 @@
 *.lai
 *.la
 *.a
+
+
+# Files to Ignore
+
+*.sln
+*.suo
+*.vcxproj
+*.vcxproj.filters
+*.opensdf
+*.sdf
+*.vcxproj.user
+.git/**
+ipch/**
+Debug/**

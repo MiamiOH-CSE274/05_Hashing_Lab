@@ -46,7 +46,7 @@ class HashTable : public USet <Key, T> {
   HashTable();
   //Delete any dynamically allocated memory.
   virtual ~HashTable();
-
+  
 private:
   //A pointer to the array that holds the hash table data
   HashRecord* backingArray;
@@ -71,3 +71,4 @@ private:
 };
 
 #include "HashTable.ipp"
+

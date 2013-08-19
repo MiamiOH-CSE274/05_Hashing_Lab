@@ -13,7 +13,7 @@
  * with the appropriate input type.
  */
 unsigned long hash(std::string k){
-  unsigned long m = hashPrimes[NUM_HASH_PRIMES-2];
+  unsigned long m = hashPrimes[0];
   unsigned long ret = 0;
   for(int i=0;i<k.size();i++){
     ret = (256*ret + k[i])%m;
