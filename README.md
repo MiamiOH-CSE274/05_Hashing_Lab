@@ -1,3 +1,6 @@
+Author
+==========
+"Harvey, Steven", harveysd
 05_Hashing_Lab
 ==============
 
