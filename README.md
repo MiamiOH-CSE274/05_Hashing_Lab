@@ -1,3 +1,6 @@
+Author
+==========
+"Hiler, Rodney", hilerrw
 05_Hashing_Lab
 ==============
 
