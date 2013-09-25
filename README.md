@@ -1,3 +1,6 @@
+Author
+==========
+"Bickley, Daniel", bickledb
 05_Hashing_Lab
 ==============
 
