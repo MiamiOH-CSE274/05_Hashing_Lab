@@ -1,3 +1,6 @@
+Author
+==========
+"Turner, Chace", turnerce
 05_Hashing_Lab
 ==============
 
