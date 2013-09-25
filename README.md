@@ -1,3 +1,6 @@
+Author
+==========
+"Proctor, Patrick", proctopj
 05_Hashing_Lab
 ==============
 
