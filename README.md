@@ -1,3 +1,6 @@
+Author
+==========
+"Luo, Yu", luoy6
 05_Hashing_Lab
 ==============
 
