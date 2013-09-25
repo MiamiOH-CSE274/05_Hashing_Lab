@@ -1,3 +1,6 @@
+Author
+==========
+"Bailey, Sam", baileys2
 05_Hashing_Lab
 ==============
 
