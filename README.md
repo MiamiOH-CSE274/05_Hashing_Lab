@@ -1,3 +1,6 @@
+Author
+==========
+"Emrick, Garrett", emrickgj
 05_Hashing_Lab
 ==============
 
