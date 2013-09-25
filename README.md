@@ -1,3 +1,6 @@
+Author
+==========
+"Stilgenbauer, Kendall", stilgeki
 05_Hashing_Lab
 ==============
 
