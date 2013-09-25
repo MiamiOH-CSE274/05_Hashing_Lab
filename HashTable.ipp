@@ -2,7 +2,7 @@
 //unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
 
 
-
+#include <string>
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
@@ -53,7 +53,7 @@ template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 	T item = backingArray[hash(k)].x;
 	if(!keyExists(k))
-		throw std::string("No such item");
+		throw (std::string)"No such item";
 	return item;
 }
 
