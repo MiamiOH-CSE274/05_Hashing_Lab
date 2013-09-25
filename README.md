@@ -1,3 +1,6 @@
+Author
+==========
+"Decker, Benjamin", deckerbd
 05_Hashing_Lab
 ==============
 
