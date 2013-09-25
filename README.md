@@ -1,3 +1,6 @@
+Author
+==========
+"Vutisalchavakul, Pob", vutisat
 05_Hashing_Lab
 ==============
 
