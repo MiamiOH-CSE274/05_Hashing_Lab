@@ -1,3 +1,6 @@
+Author
+==========
+"Mullins, Harrison", mullingh
 05_Hashing_Lab
 ==============
 
