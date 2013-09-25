@@ -1,3 +1,6 @@
+Author
+==========
+"Li, Yang", liy28
 05_Hashing_Lab
 ==============
 
