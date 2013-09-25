@@ -1,3 +1,6 @@
+Author
+==========
+"Griffith, David", griffid5
 05_Hashing_Lab
 ==============
 
