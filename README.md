@@ -1,3 +1,6 @@
+Author
+==========
+"Contini, Nick", continnd
 05_Hashing_Lab
 ==============
 
