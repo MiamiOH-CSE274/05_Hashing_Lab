@@ -1,3 +1,6 @@
+Author
+==========
+"Kojs, Michelle", kojsmn
 05_Hashing_Lab
 ==============
 
