@@ -1,3 +1,6 @@
+Author
+==========
+"Kimmet, Adrian", kimmetad
 05_Hashing_Lab
 ==============
 
