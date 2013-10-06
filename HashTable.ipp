@@ -2,6 +2,9 @@
 // remove
 #include <string>
 
+unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+HashTable<char,int> mySillyTable;
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   //TODO
