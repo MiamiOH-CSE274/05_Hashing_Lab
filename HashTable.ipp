@@ -7,17 +7,23 @@ HashTable<char,int> mySillyTable;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+	backingArray = new HashRecord();
+	numItems = 0;
+	//backingArraySize = 0;
+	//numRemoved = 0;
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  delete backingArray;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+  //if (numItems > backingArraySize)
+ // backingArray[k] = x;
+// backingArray[x] = k;
+  numItems++;
 }
 
 template <class Key, class T>
@@ -27,21 +33,50 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
+	//int j = backingArray(k);
+	//for (int i = 0; i < backingArraySize; i++){
+		//if (k == backingArray[i])
+	//		return i;
+//			}
   //TODO
+  //int i = hash(k);
+  //while(backingArray[i] != null) {
+	//if (backingArray[i] !=
+//for (int i = 0; i < backingArraySize; i++){
+//	if (backingArray[i] == (k)){
+//		return i;
+//		}
+//		}
+
+
+
+
   T dummy;
   return dummy;
 }
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
+
+/*	int i = hash(k);
+	while (backingArray[i].isNull == false){
+		if (backingArray[i].isDel == false && backingArray[i] == k)
+			//return backingArray[i];
+			return true;
+		}*/
+	
+//	for (int i = 0; i < backingArraySize; i++){
+//		if (backingArray[i] == k)
+//			return true;
+//	}
+
   return false;
 }
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
   //TODO
-  return 0;
+  return numItems;
 }
 
 template <class Key, class T>
