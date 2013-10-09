@@ -5,11 +5,14 @@
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   //TODO
+  backingArray = new HashRecord();
+  numItems =0;
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
   //TODO
+  delete backingArray;
 }
 
 template <class Key, class T>
