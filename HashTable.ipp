@@ -20,10 +20,16 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //if (numItems > backingArraySize)
- // backingArray[k] = x;
-// backingArray[x] = k;
-  numItems++;
+	if (2*numItems < backingArraySize) {
+	//	grow();
+		}
+	//Change key to int
+	int key = 0;
+	//for (int i = 0; i < k.length(); i++){
+	//	key = (key * 256 + k.charAt(i)) % backingArraySize;
+	//	}
+	//backingArray[k] = x;
+	numItems++;
 }
 
 template <class Key, class T>
@@ -75,11 +81,16 @@ bool HashTable<Key,T>::keyExists(Key k){
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
   return numItems;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-  //TODO
+	HashRecord temp = new HashRecord();
+	//int cnt;
+	for (int i = 0; i < backingArraySize; i++){
+		temp[i] = backingArray[i];
+		}
+	//backingArraySize = hashPrimes[cnt+1];
+	//cnt++;
 }
