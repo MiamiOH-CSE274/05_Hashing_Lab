@@ -36,7 +36,7 @@ void HashTable<Key,T>::add(Key k, T x){
     else{
         
         if (backingArray[index].isDel || backingArray[index].isNull) {
-            //Avoids the unnecessary searching and jumping if we can
+            //Avoids the unecessary searching and jumping if we can
             //add it right away
         }
             else{
@@ -52,43 +52,33 @@ void HashTable<Key,T>::add(Key k, T x){
     backingArray[index].k = k;
     backingArray[index].x = x;
     backingArray[index].isNull = false;
+    if(backingArray[index].isDel == true)
+        backingArray[inde].isDel = false;
     backingArray[index].isDel=false;
     
     numItems++;
+    
+    if (numItems + numRemoved >=backingArraySize/2) {
+        grow();
+    }
 }
 
 template <class Key, class T>
-void HashTable<Key,T>::remove(Key k){
-    if (!keyExists(k)) {
-        unsigned long index = hash(k, backingArraySize);
+void HashTable<Key,T>::remove(Key key){
+    if (keyExists(key)) {
+        unsigned long index = hash(key, backingArraySize);
         
-        if (backingArray[index].isDel || backingArray[index].isNull) {
-            //Avoids the unnecessary searching and jumping if we can
-            //add it right away
-        }
-        else{
+        while (backingArray[index].k !=key) {
             unsigned long jumpDist = 1+(index%(backingArraySize-1));
             index = (index+jumpDist)%backingArraySize;
-            
-            while(!backingArray[index].isNull || !backingArray[index].isDel){
-                index = (index+jumpDist)%backingArraySize;
-            }
-            
+
         }
-    }
-    backingArray[index].k = k;
-    backingArray[index].x = x;
-    backingArray[index].isNull = false;
-    
-    
-    
-    
         numItems--;
         numRemoved++;
         backingArray[index].isDel = true;
-
-        }
     }
+
+}
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key key){
@@ -118,7 +108,7 @@ template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key key){
   unsigned long index = hash(key, backingArraySize);
   
-    if (backingArray[index].isDel || !backingArray[index].isNull) {
+    if (!backingArray[index].isDel && !backingArray[index].isNull) {
         if (backingArray[index].k == key) {
             return true;
         }
@@ -128,7 +118,7 @@ bool HashTable<Key,T>::keyExists(Key key){
             index = (index+jumpDist)%backingArraySize;
             
             while(!backingArray[index].isNull || index!=startingIndex){
-                if (backingArray[index].k == key) {
+                if (!backingArray[index].isDel && backingArray[index].k == key) {
                     return true;
                 }
                 else index = (index+jumpDist)%backingArraySize;
@@ -147,5 +137,7 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-  //TODO
+    
+    
+    
 }
