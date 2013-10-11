@@ -2,14 +2,36 @@
 // remove
 #include <string>
 
+unsigned long hash (std::string key){
+
+  unsigned long hashValue = 0;
+
+  for (int index = 0; index < key.size(); index++){
+    hashvalue+=9;          //fix later
+  }
+
+  return hashValue;
+
+}
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+
+  numItems = 0;
+  numRemoved = 0;
+  backingArraySize = hashPrimes[0];
+
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  
+  int totalNumItems = numItems;
+  for (int index = 0; index < totalNumItems; index++){
+	remove (0);
+  }
+  backingArraySize = 0;
+
 }
 
 template <class Key, class T>
@@ -37,8 +59,9 @@ bool HashTable<Key,T>::keyExists(Key k){
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
-  return 0;
+  
+  return numItems;
+
 }
 
 template <class Key, class T>
