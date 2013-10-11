@@ -24,7 +24,18 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+  
+  if (find(k) != NULL)
+    throw std::string ("Error: item already exists in memory");
+  if ((2*(numItems + numRemoved)) >= backingArraySize)
+    grow ();
+  int itemLocation = hash(k);
+  while (backingArray[itemLocation].isNull == false && backingArray[itemLocation].isDel == false){
+    itemLocation = (itemLocation == backingArraySize-1) ? 0 : itemLocation + 1;
+  }
+  numItems++;
+  backingArray[itemLocation] = x;
+
 }
 
 template <class Key, class T>
@@ -34,9 +45,15 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  //TODO
-  T dummy;
-  return dummy;
+  
+  int itemLocation = hash(k);
+  while (backingArray[itemLocation].isNull == false){
+    if (backingArray[itemLocation].isDel == false && backingArray[itemLocation] == k)
+	  return *backingArray[itemLocation];
+	itemLocation = (itemLocation == backingArraySize-1) ? 0 : itemLocation + 1;
+  }
+  return NULL;
+
 }
 
 template <class Key, class T>
