@@ -21,6 +21,8 @@ HashTable<Key,T>::HashTable(){
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
     delete [] backingArray;
+    numItems = 0;
+    numRemoved = 0;
 }
 
 template <class Key, class T>
@@ -48,15 +50,17 @@ void HashTable<Key,T>::add(Key k, T x){
                 }
                 
             }
-        }
+    numItems++;
+    }
     backingArray[index].k = k;
     backingArray[index].x = x;
     backingArray[index].isNull = false;
-    if(backingArray[index].isDel == true)
-        backingArray[inde].isDel = false;
+    if(backingArray[index].isDel == true){
+        numRemoved--;
+    }
     backingArray[index].isDel=false;
     
-    numItems++;
+    
     
     if (numItems + numRemoved >=backingArraySize/2) {
         grow();
@@ -138,6 +142,33 @@ unsigned long HashTable<Key,T>::size(){
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
     
+    unsigned long newArraySize = 0;
     
+    while (backingArraySize>=hashPrimes[newArraySize]){
+        newArraySize++;
+    }
+    
+    newArraySize = hashPrimes[newArraySize];
+    
+    HashRecord* largerArray = new HashRecord[newArraySize];
+    HashRecord* curArray = backingArray;
+    unsigned long curArraySize = backingArraySize;
+    backingArray = largerArray;
+    backingArraySize = newArraySize;
+    unsigned long itemToCopy = numItems;
+    unsigned long index = 0;
+    numItems = 0;
+    numRemoved = 0;
+    while (itemToCopy>5) {
+    //for (HashRecord t: curArray){
+        if(!curArray[index].isDel && !curArray[index].isNull){
+            add(curArray[index].k, curArray[index].x);
+            itemToCopy --;
+        }
+        index++;
+    }
+    
+    //delete [] largerArray;
+    delete [] curArray;
     
 }
