@@ -4,7 +4,11 @@
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+    backingArraySize = hashPrimes[0];
+    backingArray = new HashRecord[backingArraySize];
+    numRemoved = 0;
+    numItems = 0;
+    
 }
 
 template <class Key, class T>
