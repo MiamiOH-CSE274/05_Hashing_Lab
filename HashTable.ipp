@@ -2,18 +2,6 @@
 // remove
 #include <string>
 
-unsigned long hash (std::string key){
-
-  unsigned long hashValue = 0;
-
-  for (int index = 0; index < key.size(); index++){
-    hashvalue+=9;          //fix later
-  }
-
-  return hashValue;
-
-}
-
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
 
