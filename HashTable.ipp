@@ -2,15 +2,20 @@
 // remove
 #include <string>
 
-unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
-HashTable<char,int> mySillyTable;
+unsigned long hash(char c){ 
+	//return ((unsigned long)c);
+	int total = 0;
+	return ((unsigned long)c)%11; 
+}
+
+HashTable<char,int> myTable;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
 	backingArray = new HashRecord();
 	numItems = 0;
-	//backingArraySize = 0;
-	//numRemoved = 0;
+	backingArraySize = 11;
+	numRemoved = 0;
 }
 
 template <class Key, class T>
@@ -20,25 +25,47 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
+	
 	if (2*numItems < backingArraySize) {
-	//	grow();
+		//grow();
+	}
+
+	int place = hash(k);
+	std::cout << hash(k) << std::endl;
+
+	int index = place%backingArraySize;
+	//std::cout << index;
+	
+	//for (int i = 0; i < backingArraySize; i++){
+		if (backingArray[index].isNull == false){
+			// JUMP
+			//index = index*2;
 		}
-	//Change key to int
-	int key = 0;
-	//for (int i = 0; i < k.length(); i++){
-	//	key = (key * 256 + k.charAt(i)) % backingArraySize;
-	//	}
-	//backingArray[k] = x;
+		backingArray[index].x = x;
+
+	//}
+	
+	for (int i = 0; i < backingArraySize; i++){
+	}
 	numItems++;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
+  numRemoved++;
+  numItems--;
 }
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
+	int place = hash(k);
+	int index = place % backingArraySize;
+
+	if (backingArray[index].k == k){
+		return backingArray[index].x;
+	}
+	//T dummy;
+	//return dummy;
 	//int j = backingArray(k);
 	//for (int i = 0; i < backingArraySize; i++){
 		//if (k == backingArray[i])
@@ -53,16 +80,17 @@ T HashTable<Key,T>::find(Key k){
 //		return i;
 //		}
 //		}
-
-
-
-
-  T dummy;
-  return dummy;
+  //T dummy;
+  //return dummy;
 }
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
+	if (find(k)== true){
+		return true;
+	}
+	return false;
+
 
 /*	int i = hash(k);
 	while (backingArray[i].isNull == false){
@@ -71,12 +99,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 			return true;
 		}*/
 	
-//	for (int i = 0; i < backingArraySize; i++){
-//		if (backingArray[i] == k)
-//			return true;
-//	}
-
-  return false;
+  //return false;
 }
 
 template <class Key, class T>
@@ -86,11 +109,15 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
+
 	HashRecord temp = new HashRecord();
 	//int cnt;
 	for (int i = 0; i < backingArraySize; i++){
-		temp[i] = backingArray[i];
+		temp[i].x = backingArray[i].x;
+		if (backingArraySize < hashPrimes[i]){
+			backingArraySize = hashPrimes[i];
+			//backingArray.add(temp[i]);
+			}
 		}
-	//backingArraySize = hashPrimes[cnt+1];
-	//cnt++;
+	backingArray = temp;
 }
