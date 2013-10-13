@@ -7,12 +7,15 @@ unsigned long Hash(class Key){
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+  numItems = 0;
+  numRemoved = 0;
+  backingArraySize = 0;
+  backingArray = new HashRecord[backingArraySize];
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  delete[] backingArray;
 }
 
 template <class Key, class T>
