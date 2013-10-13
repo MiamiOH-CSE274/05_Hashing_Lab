@@ -1,6 +1,9 @@
 //You will need this so you can make a string to throw in
 // remove
 #include <string>
+unsigned long Hash(class Key){
+
+}
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
