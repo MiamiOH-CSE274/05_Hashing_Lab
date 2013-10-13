@@ -1,6 +1,9 @@
 //You will need this so you can make a string to throw in
 // remove
 #include <string>
+
+
+
 unsigned long hash(std::string k, unsigned long bAS){
     unsigned long m = bAS;
     unsigned long ret = 0;
@@ -20,7 +23,7 @@ HashTable<Key,T>::HashTable(){
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-    delete [] backingArray;
+    //delete [] backingArray;
     numItems = 0;
     numRemoved = 0;
 }
@@ -45,8 +48,13 @@ void HashTable<Key,T>::add(Key k, T x){
                 unsigned long jumpDist = 1+(index%(backingArraySize-1));
                 index = (index+jumpDist)%backingArraySize;
                 
-                while(!backingArray[index].isNull || !backingArray[index].isDel){
-                    index = (index+jumpDist)%backingArraySize;
+                bool endWhile = false;
+                
+                while(!backingArray[index].isNull && !endWhile){
+                    if (!backingArray[index].isDel) {
+                        index = (index+jumpDist)%backingArraySize;
+                    }
+                    else endWhile = true;
                 }
                 
             }
@@ -59,8 +67,6 @@ void HashTable<Key,T>::add(Key k, T x){
         numRemoved--;
     }
     backingArray[index].isDel=false;
-    
-    
     
     if (numItems + numRemoved >=backingArraySize/2) {
         grow();
@@ -121,7 +127,7 @@ bool HashTable<Key,T>::keyExists(Key key){
             unsigned long startingIndex = index;
             index = (index+jumpDist)%backingArraySize;
             
-            while(!backingArray[index].isNull || index!=startingIndex){
+            while(!backingArray[index].isNull){
                 if (!backingArray[index].isDel && backingArray[index].k == key) {
                     return true;
                 }
@@ -148,29 +154,23 @@ void HashTable<Key,T>::grow(){
         newArraySize++;
     }
     
-    newArraySize = hashPrimes[newArraySize];
-    
-    HashRecord* largerArray = new HashRecord[newArraySize];
-    HashRecord* curArray = backingArray;
-    unsigned long curArraySize = backingArraySize;
-    backingArray = largerArray;
-    backingArraySize = newArraySize;
-    long itemsToCopy = numItems;
-    unsigned long index = 0;
-    
-    numRemoved = 0;
-    //while (itemToCopy>0) {
-    for (unsigned long i=0; i<curArraySize;i++){
-        if(!curArray[i].isNull && !curArray[i].isDel){
-            add(curArray[i].k, curArray[i].x);
-            numItems = 0;
+    HashTable<Key,T> newHt;
+    delete [] newHt.backingArray;
+    newHt.backingArray = new HashRecord[hashPrimes[newArraySize]];
+    newHt.backingArraySize = hashPrimes[newArraySize];
+
+    for (unsigned long i=0; i<backingArraySize; i++){
+        if(!backingArray[i].isNull && !backingArray[i].isDel){
+            newHt.add(backingArray[i].k, backingArray[i].x);
         }
-        //index++;
     }
     
-    numItems = itemsToCopy;
     
-    //delete [] largerArray;
-    delete [] curArray;
+    backingArray = newHt.backingArray;
+    backingArraySize = newHt.backingArraySize;
+    numItems = newHt.numItems;
+    
+    
+    delete [] newHt.backingArray;
     
 }
