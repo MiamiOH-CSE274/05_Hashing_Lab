@@ -5,19 +5,22 @@
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   //TODO
-  backingArray = new HashRecord();
+  backingArraySize = 53;
+  backingArray = new HashRecord[backingArraySize];
   numItems =0;
+  numRemoved =0;
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
   //TODO
-  delete backingArray;
+  delete[] backingArray;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
   //TODO
+
 }
 
 template <class Key, class T>
@@ -41,7 +44,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
   //TODO
-  return 0;
+  return numItems;
 }
 
 template <class Key, class T>
