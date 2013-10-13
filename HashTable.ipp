@@ -155,18 +155,20 @@ void HashTable<Key,T>::grow(){
     unsigned long curArraySize = backingArraySize;
     backingArray = largerArray;
     backingArraySize = newArraySize;
-    unsigned long itemToCopy = numItems;
+    long itemsToCopy = numItems;
     unsigned long index = 0;
-    numItems = 0;
+    
     numRemoved = 0;
-    while (itemToCopy>5) {
-    //for (HashRecord t: curArray){
-        if(!curArray[index].isDel && !curArray[index].isNull){
-            add(curArray[index].k, curArray[index].x);
-            itemToCopy --;
+    //while (itemToCopy>0) {
+    for (unsigned long i=0; i<curArraySize;i++){
+        if(!curArray[i].isNull && !curArray[i].isDel){
+            add(curArray[i].k, curArray[i].x);
+            numItems = 0;
         }
-        index++;
+        //index++;
     }
+    
+    numItems = itemsToCopy;
     
     //delete [] largerArray;
     delete [] curArray;
