@@ -2,7 +2,9 @@
 // remove
 #include <string>
 
-
+//Couldn't figure out how to call the hash method in main.cpp,
+//was getting an error saying the method wasn't visible, so I overloaded
+//it here.
 
 unsigned long hash(std::string k, unsigned long bAS){
     unsigned long m = bAS;
