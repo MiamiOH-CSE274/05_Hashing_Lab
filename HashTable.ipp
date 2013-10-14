@@ -53,6 +53,8 @@ void HashTable<Key,T>::remove(Key k){
 	}
 	  i = (i == backingArraySize-1) ? 0 : i + 1;
   }
+
+  return;
 }
 
 
@@ -77,9 +79,10 @@ T HashTable<Key,T>::find(Key k){
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
   //TODO
-  	if(backingArray[hash(k)%backingArraySize].isNull || backingArray[hash(k)%backingArraySize].isDel)
-		return false;
+  int index = hash(k)%backingArraySize;
+  if(backingArray[index].isNull==false&&backingArray[index].isDel==false)
 	return true;
+  return false;
 }
 
 
