@@ -2,6 +2,10 @@
 // remove
 #include <string>
 
+
+unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+//HashTable<char,int> mySillyTable;
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   //TODO
@@ -20,7 +24,19 @@ HashTable<Key,T>::~HashTable() {
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
   //TODO
+  if((numItems/backingArraySize)<1/2){
+	grow();
+  }
 
+  unsigned long kIndex= hash(k);
+  unsigned long i = 0;
+  while(i!=kIndex){
+    kIndex = (kIndex+1)%backingArraySize;
+  }
+  backingArray[kIndex].x=x;
+  backingArray[kIndex].k =k;
+  backingArray[kIndex].isNull = false;
+  numItems++;
 }
 
 template <class Key, class T>
@@ -31,8 +47,16 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   //TODO
-  T dummy;
-  return dummy;
+
+  if(!keyExists(k))
+		throw std::string("There is no such item");
+ int i = (hash(k)%backingArraySize);
+    while (backingArray[i].isNull==false) {
+      if (backingArray[i].k == k) 
+	  return backingArray[i].x;
+      i =  (i+1)%backingArraySize;
+    }
+
 }
 
 template <class Key, class T>
