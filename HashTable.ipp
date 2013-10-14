@@ -6,7 +6,7 @@ int sizeOfArrayIndex = 0;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-	backingArraySize = hashPrimes[0];
+	backingArraySize = hashPrimes[sizeOfArrayIndex];
 	backingArray = new HashRecord[backingArraySize];
 	numItems = 0;
 	numRemoved = 0;
@@ -22,46 +22,49 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  
+   if(numItems + numRemoved >= backingArraySize/2) {
+   
+		grow();
+		
+	}
+	
+	
   unsigned long index = hash(k)%backingArraySize;
-  if (backingArray[index].isNull) {
-    backingArray[index].isNull = false;
-	backingArray[index].k = k;
-	backingArray[index].x = x;
+  std::cout << "hashed" << std::endl;
+  unsigned long curIndex = index;
+  if (backingArray[curIndex].isNull) {
+  
+    backingArray[curIndex].isNull = false;
+	std::cout << "Problem is:";
+	backingArray[curIndex].k = k;
+	std::cout << "adslkfjahfdklajdhflakdsfhaskjfhadslkjfhskjlfhlkh" << std::endl;
+	backingArray[curIndex].x = x;
+	
 	numItems++;
-	if ( numItems >= (backingArraySize/2) )
-	grow();
-
 	return;
   }
-  while (!(backingArray[index].isNull)){
-	index = (index+index)%backingArraySize;
 
-	 if (backingArray[index].isNull) {
-		backingArray[index].isNull = false;
-		backingArray[index].k = k;
-		backingArray[index].x = x;
+  for(int i = 0; i < (int)backingArraySize; i++) {
+	curIndex = (curIndex+index)%backingArraySize;
+	
+	 if (backingArray[curIndex].isNull) {
+		backingArray[curIndex].isNull = false;
+		backingArray[curIndex].k = k;
+		backingArray[curIndex].x = x;
 		numItems++;
-		if ( numItems >= (backingArraySize/2) )
-	grow();
-
 		return;
 	}
 
-	if (backingArray[index].isDel) {
-	  backingArray[index].isDel = false;
-	  backingArray[index].isNull = false;
-	  backingArray[index].k = k;
-	  backingArray[index].x = x;
+	if (backingArray[curIndex].isDel) {
+	  backingArray[curIndex].isDel = false;
+	  backingArray[curIndex].isNull = false;
+	  backingArray[curIndex].k = k;
+	  backingArray[curIndex].x = x;
 	  numRemoved--;
 	  numItems++;
-	  if ( numItems >= (backingArraySize/2) )
-	grow();
-
 	  return;
 	  }
   }
-
 }
 
 template <class Key, class T>
@@ -115,19 +118,33 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-	HashTable<Key,T> second;
+	
+    sizeOfArrayIndex++;
+	HashTable<Key,T> secondTable;
+	secondTable.backingArraySize = hashPrimes[sizeOfArrayIndex];
+	secondTable.backingArray = new HashRecord[backingArraySize];
+	secondTable.numItems = 0;
+	secondTable.numRemoved = 0;
+	numItems = 0;
 
-   sizeOfArrayIndex++;
-	second.backingArraySize = hashPrimes[sizeOfArrayIndex];
-	second.backingArray = new HashRecord[backingArraySize];
-	for (int i = 0; i < (int)hashPrimes[sizeOfArrayIndex-1]; i++) {
-	  if (!(backingArray[i].isNull) && !backingArray[i].isDel) {
-		second.add(backingArray[i].k,backingArray[i].x);
-		}
-
+	for (int i = 0; i < backingArraySize; i++) {
+	std::cout<<"Done";
+	  secondTable.add(backingArray[i].k,backingArray[i].x);
+	  std::cout << "NOt done";
 	}
-	backingArray = second.backingArray;
-	backingArraySize = second.backingArraySize;
+	std::cout << secondTable.backingArraySize;
+	delete[] backingArray;
+	backingArray = secondTable.backingArray;
+	backingArraySize = secondTable.backingArraySize;
+	numItems = secondTable.numItems;
+	numRemoved = 0;
+
+
+
+
+
+
+	
 	numRemoved = 0;
 	
 
