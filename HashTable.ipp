@@ -2,6 +2,8 @@
 // remove
 #include <string>
 
+unsigned long hash(class Key);
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   numItems = 0;
@@ -27,7 +29,13 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-	
+	int hashValue = hash(k) % backingArraySize;
+	while(!backingArray[hashValue]->isNull){
+		if(backingArray[hashValue]->isDel && backingArray[hashValue] == k){
+			hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
+		}
+	}
+	return null;
 }
 
 template <class Key, class T>
