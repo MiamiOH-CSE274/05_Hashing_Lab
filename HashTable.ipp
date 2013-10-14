@@ -23,7 +23,7 @@ HashTable<Key,T>::HashTable(){
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-    //delete [] backingArray;
+    delete [] backingArray;
     numItems = 0;
     numRemoved = 0;
 }
@@ -124,7 +124,6 @@ bool HashTable<Key,T>::keyExists(Key key){
         }
         else{
             unsigned long jumpDist = 1+(index%(backingArraySize-1));
-            unsigned long startingIndex = index;
             index = (index+jumpDist)%backingArraySize;
             
             while(!backingArray[index].isNull){
@@ -154,23 +153,19 @@ void HashTable<Key,T>::grow(){
         newArraySize++;
     }
     
-    HashTable<Key,T> newHt;
-    delete [] newHt.backingArray;
-    newHt.backingArray = new HashRecord[hashPrimes[newArraySize]];
-    newHt.backingArraySize = hashPrimes[newArraySize];
+    HashRecord* newHt = backingArray;
+    unsigned long newHtbackingArraySize = backingArraySize;
+    backingArray = new HashRecord[hashPrimes[newArraySize]];
+    backingArraySize = hashPrimes[newArraySize];
+    
+    numItems = 0;
 
-    for (unsigned long i=0; i<backingArraySize; i++){
-        if(!backingArray[i].isNull && !backingArray[i].isDel){
-            newHt.add(backingArray[i].k, backingArray[i].x);
+
+    for (unsigned long i=0; i<newHtbackingArraySize; i++){
+        if(!newHt[i].isNull && !newHt[i].isDel){
+            add(backingArray[i].k, backingArray[i].x);
         }
     }
-    
-    
-    backingArray = newHt.backingArray;
-    backingArraySize = newHt.backingArraySize;
-    numItems = newHt.numItems;
-    
-    
-    delete [] newHt.backingArray;
+    delete [] newHt;
     
 }
