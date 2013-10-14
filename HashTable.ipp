@@ -44,17 +44,16 @@ void HashTable<Key,T>::remove(Key k){
   //TODO
 
   int i = hash(k)%backingArraySize;
-  while(!(backingArray[i].isNull)){
-
-	if(!(backingArray[i].isDel)&&backingArray[i].k==k){
+  while(!backingArray[i].isNull){
+	if(backingArray[i].isDel==false&& backingArray[i].k==k){
 		backingArray[i].isDel = true;
 		numItems--;
 		numRemoved++;
 	}
-	  i = (i == backingArraySize-1) ? 0 : i + 1;
+	
+	i = (i == backingArraySize-1) ? 0 : i + 1;
   }
 
-  return;
 }
 
 
@@ -71,7 +70,6 @@ T HashTable<Key,T>::find(Key k){
   }
   if(!keyExists(k))
 		throw std::string("There is no such item");
-  backingArray[i].isNull = true;
 }
 
 
