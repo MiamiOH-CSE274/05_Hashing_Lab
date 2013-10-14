@@ -1,9 +1,6 @@
 //You will need this so you can make a string to throw in
 // remove
 #include <string>
-unsigned long Hash(class Key){
-
-}
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
@@ -30,9 +27,7 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  //TODO
-  T dummy;
-  return dummy;
+	
 }
 
 template <class Key, class T>
