@@ -122,11 +122,16 @@ void HashTable<Key,T>::grow(){
     while (backingArraySize>=hashPrimes[index]){
         index++;
     }
+
+   // create a temp HashRecord to hold the old data
    HashRecord* temp = backingArray;
    int tempSize = backingArraySize;
+
+   // grow the backing array
    backingArraySize = hashPrimes[index];
    backingArray = new HashRecord[hashPrimes[index]];
   
+  // copy the old data
   numItems = 0;
   for(int i = 0; i<tempSize; i++){
 	if(!temp[i].isNull && !temp[i].isDel)
