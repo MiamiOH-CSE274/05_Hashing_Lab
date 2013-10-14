@@ -14,6 +14,7 @@ HashTable<Key,T>::HashTable(){
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
+  delete[] backingArray;
   
 }
 
