@@ -2,19 +2,14 @@
 // remove
 #include <string>
 
-unsigned long hash(char c){ 
-	//return ((unsigned long)c);
-	int total = 0;
-	return ((unsigned long)c)%11; 
-}
-
-HashTable<char,int> myTable;
+unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+HashTable<char,int> mySillyTable;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
 	backingArray = new HashRecord();
 	numItems = 0;
-	backingArraySize = 11;
+	backingArraySize = 13;
 	numRemoved = 0;
 }
 
@@ -25,9 +20,9 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-	
-	if (2*numItems < backingArraySize) {
-		//grow();
+	//TODO
+	if (2*numItems > backingArraySize) {
+	//grow();
 	}
 
 	int place = hash(k);
@@ -35,89 +30,74 @@ void HashTable<Key,T>::add(Key k, T x){
 
 	int index = place%backingArraySize;
 	//std::cout << index;
-	
-	//for (int i = 0; i < backingArraySize; i++){
-		if (backingArray[index].isNull == false){
-			// JUMP
-			//index = index*2;
-		}
-		backingArray[index].x = x;
 
-	//}
-	
-	for (int i = 0; i < backingArraySize; i++){
+	//for (int i = 0; i < backingArraySize; i++){
+	if (backingArray[index].isNull == false){
+		int jump = 1+ (place % (backingArraySize - 1));
+		backingArray[index+jump].x = x;
+		backingArray[index+jump].isNull = false;
+		backingArray[index+jump].k = k;
 	}
-	numItems++;
+	else {
+		backingArray[index].x = x;
+		backingArray[index].isNull = false;
+		//backingArray[index].k = k;
+	}
+	//}
+
+//for (int i = 0; i < backingArraySize; i++){
+//}
+	
+  numItems++;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  numRemoved++;
   numItems--;
+  numRemoved++;
 }
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 	int place = hash(k);
 	int index = place % backingArraySize;
-
-	if (backingArray[index].k == k){
-		return backingArray[index].x;
+	int jump = 1 + (place%(backingArraySize - 1));
+	
+	int i = index;
+	std::cout << "INDEX" << i << std::endl;
+	std::cout << "hey" << backingArray[i].isNull << std::endl;
+	while (!backingArray[i].isNull) {
+		std::cout << "returning" << hash(backingArray[index].k) << std::endl;
+		std::cout << "key2" << hash(k)%backingArraySize << std::endl;
+		if (hash(backingArray[i].k) == hash(k)%backingArraySize){
+			std::cout << "HERE";
+			return backingArray[i].x;
+			backingArray[i].isNull = false;
+		}
+		i = i + jump;
+		std::cout << "INDEX.." << i << std::endl;
 	}
-	//T dummy;
-	//return dummy;
-	//int j = backingArray(k);
-	//for (int i = 0; i < backingArraySize; i++){
-		//if (k == backingArray[i])
-	//		return i;
-//			}
-  //TODO
-  //int i = hash(k);
-  //while(backingArray[i] != null) {
-	//if (backingArray[i] !=
-//for (int i = 0; i < backingArraySize; i++){
-//	if (backingArray[i] == (k)){
-//		return i;
-//		}
-//		}
-  //T dummy;
-  //return dummy;
+	//return backingArray[i].x;
 }
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-	if (find(k)== true){
+
+	if (find(k) == true){
 		return true;
 	}
-	return false;
 
+ 	return false;
 
-/*	int i = hash(k);
-	while (backingArray[i].isNull == false){
-		if (backingArray[i].isDel == false && backingArray[i] == k)
-			//return backingArray[i];
-			return true;
-		}*/
-	
-  //return false;
 }
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
+  //TODO
   return numItems;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-
-	HashRecord temp = new HashRecord();
-	//int cnt;
-	for (int i = 0; i < backingArraySize; i++){
-		temp[i].x = backingArray[i].x;
-		if (backingArraySize < hashPrimes[i]){
-			backingArraySize = hashPrimes[i];
-			//backingArray.add(temp[i]);
-			}
-		}
-	backingArray = temp;
+  //TODO
 }
