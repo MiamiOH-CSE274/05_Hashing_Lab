@@ -19,10 +19,7 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  int hashValue = hash(k) % backingArraySize;
-  backingArray[hashValue]->isNull = false;
-  backingArray[hashValue]->isDel = false;
-  backingArray[hashValue] = x;
+  
 }
 
 template <class Key, class T>
@@ -33,8 +30,9 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 	int hashValue = hash(k) % backingArraySize;
-	while(!backingArray[hashValue]->isNull){
-		if(backingArray[hashValue]->isDel && backingArray[hashValue] == k){
+	while(backingArray[hashValue]->isNull == false){
+		if(backingArray[hashValue]->isDel == false 
+			&& backingArray[hashValue] == k){
 			return k;
 		}
 		hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
