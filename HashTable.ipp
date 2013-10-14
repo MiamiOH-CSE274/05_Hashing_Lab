@@ -2,25 +2,29 @@
 // remove
 #include <string>
 
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+  backingArraySize = hashPrimes[0];
+  backingArray = new HashRecord[backingArraySize];
+  numItems = 0;
+  numRemoved = 0;
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  delete [] backingArray;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+  //unsigned long hashV = hash(k)%backingArraySize;
+  
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
-}
+  }
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
@@ -37,8 +41,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
-  return 0;
+  return numItems;
 }
 
 template <class Key, class T>
