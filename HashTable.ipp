@@ -19,7 +19,10 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+  int hashValue = hash(k) % backingArraySize;
+  backingArray[hashValue]->isNull = false;
+  backingArray[hashValue]->isDel = false;
+  backingArray[hashValue] = x;
 }
 
 template <class Key, class T>
