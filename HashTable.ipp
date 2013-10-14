@@ -24,7 +24,7 @@ HashTable<Key,T>::~HashTable() {
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
   //TODO
-  if((numItems/backingArraySize)<1/2){
+  if(numItems + numRemoved >= backingArraySize/2){
 	grow();
   }
 
