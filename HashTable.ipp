@@ -9,7 +9,7 @@ HashTable<char,int> mySillyTable;
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   //TODO
-  backingArraySize = 53;
+  backingArraySize = hashPrimes[0];
   backingArray = new HashRecord[backingArraySize];
   numItems =0;
   numRemoved =0;
