@@ -32,10 +32,11 @@ T HashTable<Key,T>::find(Key k){
 	int hashValue = hash(k) % backingArraySize;
 	while(!backingArray[hashValue]->isNull){
 		if(backingArray[hashValue]->isDel && backingArray[hashValue] == k){
-			hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
+			return k;
 		}
+		hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
 	}
-	return null;
+	throw (std::string) "No such a value in the hash table.";
 }
 
 template <class Key, class T>
