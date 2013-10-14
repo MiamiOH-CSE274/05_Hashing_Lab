@@ -10,9 +10,7 @@ HashTable<Key,T>::HashTable(){
 	backingArray = new HashRecord();
 	numItems = 0;
 	backingArraySize = 13;
-	numRemoved = 0;
-	
-	
+	numRemoved = 0;	
 }
 
 template <class Key, class T>
@@ -20,14 +18,12 @@ HashTable<Key,T>::~HashTable() {
   delete backingArray;
 }
 
-//template <class Key, class T>
-
-
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-	//TODO
+
 	if (2*numItems > backingArraySize) {
-	//grow();
+	//std::cout << "ingrow..";
+		grow();
 	}
 	
 	int place = hash(k);
@@ -51,10 +47,10 @@ void HashTable<Key,T>::add(Key k, T x){
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-	//HashTable<Key, T> temp = find(k);
+	
 	int place = hash(k);
 	int index = place%backingArraySize;
-	int jump = 1+ (place % (backingArraySize - 1));
+	int jump = 1 + (place % (backingArraySize - 1));
 	
 	backingArray[index].x = NULL;
 	
@@ -65,7 +61,9 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-
+	if (keyExists(k) == false){
+		//throw (std::string) "invalid key";
+		}
 	int place = hash(k);
 	int index = place % backingArraySize;
 
@@ -101,19 +99,16 @@ bool HashTable<Key,T>::keyExists(Key k){
 	
 	int place = hash(k);
 	int index = place % backingArraySize;
-	std::cout << backingArray[index].x << std::endl;
-	std::cout << k << std::endl;
+	//std::cout << backingArray[index].x << std::endl;
+	//std::cout << k << std::endl;
 	//int place1 = hash(backingArray[index].k);
-	std::cout << "DD" << backingArray->k;
-
+	//std::cout << "DD" << backingArray->k;
+	bool throwing = false;
 	if (backingArray[index].isNull == false && backingArray[index].isDel == false){
-		//if (hash(backingArray[index].k) == place)
+		//if ((backingArray->k) == k){
 			return true;
 	}
-	else {
-		//throw (std::string) "Invalid Key!";
-	}
-
+	
  	return false;
 
 }
@@ -125,14 +120,17 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-  HashRecord temp = new HashRecord();
-//int cnt;
-for (int i = 0; i < backingArraySize; i++){
-temp[i].x = backingArray[i].x;
-if (backingArraySize < hashPrimes[i]){
-backingArraySize = hashPrimes[i];
-//backingArray.add(temp[i]);
-}
+  HashRecord* temp = new HashRecord();
+	//int cnt;
+	//std::cout << backingArraySize;
+	for (int i = 0; i < backingArraySize; i++){
+		temp[i] = backingArray[i];
+		//temp->k = backingArray->k;
+		if (backingArraySize < hashPrimes[i]){
+			backingArraySize = hashPrimes[i];
+			//backingArray.add(temp[i]);
+	}
+	//std::cout << "ff" << backingArraySize;
 }
 backingArray = temp;
 }
