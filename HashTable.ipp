@@ -4,7 +4,7 @@
 
 
 unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
-//HashTable<char,int> mySillyTable;
+HashTable<char,int> mySillyTable;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
@@ -28,9 +28,9 @@ void HashTable<Key,T>::add(Key k, T x){
 	grow();
   }
 
-  unsigned long kIndex= hash(k);
+  unsigned long kIndex= hash(k)%backingArraySize;
   unsigned long i = 0;
-  while(i!=kIndex){
+  while(!(backingArray[kIndex].isNull)){
     kIndex = (kIndex+1)%backingArraySize;
   }
   backingArray[kIndex].x=x;
@@ -42,28 +42,48 @@ void HashTable<Key,T>::add(Key k, T x){
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
   //TODO
+
+  int i = hash(k)%backingArraySize;
+  while(!(backingArray[i].isNull)){
+
+	if(!(backingArray[i].isDel)&&backingArray[i].k==k){
+		backingArray[i].isDel = true;
+		numItems--;
+		numRemoved++;
+	}
+	  i = (i == backingArraySize-1) ? 0 : i + 1;
+  }
 }
+
+
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   //TODO
 
+  int i = hash(k)%backingArraySize;
+  while(!(backingArray[i].isNull)){
+	if(!(backingArray[i].isDel)&& backingArray[i].k==k)
+		return backingArray[i].x;
+	  i = (i == backingArraySize-1) ? 0 : i + 1;
+  }
   if(!keyExists(k))
 		throw std::string("There is no such item");
- int i = (hash(k)%backingArraySize);
-    while (backingArray[i].isNull==false) {
-      if (backingArray[i].k == k) 
-	  return backingArray[i].x;
-      i =  (i+1)%backingArraySize;
-    }
-
+  backingArray[i].isNull = true;
 }
+
+
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
   //TODO
-  return false;
+  	if(backingArray[hash(k)%backingArraySize].isNull || backingArray[hash(k)%backingArraySize].isDel)
+		return false;
+	return true;
 }
+
+
+
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
