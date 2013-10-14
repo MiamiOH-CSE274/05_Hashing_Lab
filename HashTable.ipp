@@ -4,17 +4,23 @@
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+  backingArraySize = hashPrime[0];
+  backingArray = new hashRecord[hashPrimes[0]];
+  numItems = 0;
+
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  delete[] backingArray;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+  int index = Hash(T);
+
+  HashTable[index]->Key = Key;
+  HashTable[index]->T = T;
 }
 
 template <class Key, class T>
