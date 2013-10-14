@@ -21,27 +21,19 @@ HashTable<Key,T>::~HashTable() {
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
 
-	if (2*numItems > backingArraySize) {
-	//std::cout << "ingrow..";
+	//if (2*numItems > backingArraySize) {
+	if (numItems+numRemoved >= backingArraySize/2){
 		grow();
 	}
 	
 	int place = hash(k);
 	int index = place%backingArraySize;
-	int jump = 1+ (place % (backingArraySize - 1));
+	//int jump = 1+ (place % (backingArraySize - 1));
 
-	int i = index;
-	//while (backingArray[i].isNull == true){	
-		std::cout << "HERE";
-		//backingArray[i] = x;
 		backingArray[index].x = x;
-		backingArray[i].isNull = false;
+		backingArray[index].isNull = false;
 		backingArray->k = k;
-		//std::cout << "DAFDA" << backingArray->k << std::endl;
-		//std::cout << "kk" << backingArray[i].k << std::endl;
-		//i = i + jump;
-	//}
-	
+			
   numItems++;
 }
 
@@ -62,7 +54,7 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 	if (keyExists(k) == false){
-		//throw (std::string) "invalid key";
+		throw (std::string) "invalid key";
 		}
 	int place = hash(k);
 	int index = place % backingArraySize;
@@ -120,17 +112,28 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
+	
   HashRecord* temp = new HashRecord();
+ /*HashTable<std::string,int> test = temp;
 	//int cnt;
 	//std::cout << backingArraySize;
-	for (int i = 0; i < backingArraySize; i++){
-		temp[i] = backingArray[i];
+	std::cout << "INGRW"; 
+	int size = backingArraySize;
+	for (int i = 0; i < size; i++){
+		std::cout << "I........"; 
+		temp.add(backingArray[i].k,backingArray[i].x);
+	//	temp[i] = backingArray[i];
 		//temp->k = backingArray->k;
 		if (backingArraySize < hashPrimes[i]){
 			backingArraySize = hashPrimes[i];
+		//	HashTable temp = new HashTable[backingArraySize];
 			//backingArray.add(temp[i]);
 	}
+	
+	
+	}
 	//std::cout << "ff" << backingArraySize;
-}
+
 backingArray = temp;
+delete temp;*/
 }
