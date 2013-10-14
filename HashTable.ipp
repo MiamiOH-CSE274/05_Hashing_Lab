@@ -30,14 +30,13 @@ void HashTable<Key,T>::add(Key k, T x){
 	
 	
   unsigned long index = hash(k)%backingArraySize;
-  std::cout << "hashed" << std::endl;
   unsigned long curIndex = index;
   if (backingArray[curIndex].isNull) {
-  
+   
     backingArray[curIndex].isNull = false;
-	std::cout << "Problem is:";
+	
 	backingArray[curIndex].k = k;
-	std::cout << "adslkfjahfdklajdhflakdsfhaskjfhadslkjfhskjlfhlkh" << std::endl;
+	
 	backingArray[curIndex].x = x;
 	
 	numItems++;
@@ -120,32 +119,18 @@ template <class Key, class T>
 void HashTable<Key,T>::grow(){
 	
     sizeOfArrayIndex++;
-	HashTable<Key,T> secondTable;
-	secondTable.backingArraySize = hashPrimes[sizeOfArrayIndex];
-	secondTable.backingArray = new HashRecord[backingArraySize];
-	secondTable.numItems = 0;
-	secondTable.numRemoved = 0;
+	HashRecord* oldArray = backingArray;
+	HashRecord* newArray = new HashRecord[hashPrimes[sizeOfArrayIndex]];
+	backingArray = newArray;
+	backingArraySize = hashPrimes[sizeOfArrayIndex];
 	numItems = 0;
+	numRemoved = 0;
 
-	for (int i = 0; i < backingArraySize; i++) {
-	std::cout<<"Done";
-	  secondTable.add(backingArray[i].k,backingArray[i].x);
-	  std::cout << "NOt done";
+	for (int i = 0; i < hashPrimes[sizeOfArrayIndex-1]; i++) {
+		if (!(oldArray[i].isNull) && !(oldArray[i].isDel))
+		  add(oldArray[i].k,oldArray[i].x);
 	}
-	std::cout << secondTable.backingArraySize;
-	delete[] backingArray;
-	backingArray = secondTable.backingArray;
-	backingArraySize = secondTable.backingArraySize;
-	numItems = secondTable.numItems;
-	numRemoved = 0;
-
-
-
-
-
-
-	
-	numRemoved = 0;
+	delete[]oldArray;
 	
 
   
