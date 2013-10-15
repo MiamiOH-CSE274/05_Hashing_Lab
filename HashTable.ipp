@@ -26,12 +26,12 @@ void HashTable<Key,T>::add(Key k, T x){
 	}
 	
 	int place = hash(k);
-	int index = place%backingArraySize;
-	//int jump = 1+ (place % (backingArraySize - 1
-	
-	backingArray[index].x = x;
-	backingArray[index].isNull = false;
-	backingArray->k = k;
+	int index = place % backingArraySize;
+	//int jump = 1 + (place % (backingArraySize - 1));
+		
+			backingArray[index].x = x;
+			backingArray[index].isNull = false;
+			backingArray->k = k;
 			
 	numItems++;
 }
