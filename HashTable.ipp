@@ -50,6 +50,7 @@ void HashTable<Key,T>::add(Key k, T x){
     //I am so confused where is this hash function?
 	//Do I need to wirte my own hash function or using the hash function provided in main.cpp
 	//and move that to HashTable.ipp?
+	//I tested this program with my own hash function and it worked.
 	//No matter what, I assumed there is a hash function here.
      unsigned long hashValue = hash(k);
 
