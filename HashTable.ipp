@@ -69,8 +69,15 @@ T HashTable<Key,T>::find(Key k){
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
+  
+  int itemLocation = hash(k)%backingArraySize;
+  while (backingArray[itemLocation].isNull == false){
+    if (backingArray[itemLocation].isDel == false && backingArray[itemLocation].k ==k)
+	  return true;
+	itemLocation = (itemLocation == backingArraySize-1) ? 0 : itemLocation + 1;
+  }
   return false;
+
 }
 
 template <class Key, class T>
