@@ -31,8 +31,8 @@ Questions
 
 #### 2. I decided to use two function (`keyExists` and `find`) to enable lookup of keys. Another option would have been to have `find` return a `T*`, which would be `NULL` if an item with matching key is not found. Which design do you think would be better? Explain your reasoning. You may notice that the designers of C++ made the same decision I did when they designed http://www.cplusplus.com/reference/unordered_map/unordered_map/
 
-TODO
+I believe that the design you chose for this lab is more appropriate, as it eliminates the need for pointers in a large portion of the lab (which can lead to many mistakes and memory issues). It also helps to separate out the task of finding and validating information in any given array location, rather than having one larger method do everything.  This could potentially lead to accidental programming errors, which are never a good thing.
 
 #### 3. What is one question that confused you about this exercise, or one piece of advice you would share with students next semester?
 
-TODO
+One piece of advice I would give to future students is to stress the importance of setting up the project correctly with the constructor and destructor.  By doing this correctly, looking at all the different files to see what needed to be included, and including all of the necessary pieces to be used in the rest of the methods, it made writing the rest of the methods significantly easier and straightforward.
