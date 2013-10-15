@@ -22,15 +22,15 @@ void HashTable<Key,T>::add(Key k, T x){
   if(numItems + 1 + numRemoved >= backingArraySize/2){
 	grow();
   }
-  int hashValue = hash(k) % backingArraySize;
-  while(!backingArray[hashValue]->isNull && !backingArray[hashValue]->isDel){
+  unsigned long hashValue = hash(k) % backingArraySize;
+  while(!backingArray[hashValue].isNull && !backingArray[hashValue].isDel){
 	hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
 		}
-  if(backingArray[hashValue]->isDel){
-	backingArray[hashValue]->isDel == false;
+  if(backingArray[hashValue].isDel){
+	backingArray[hashValue].isDel == false;
   }
   numItems++;
-  backingArray[hashValue]->k == k;
+  backingArray[hashValue].k == k;
 }
 
 template <class Key, class T>
@@ -40,11 +40,11 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-	int hashValue = hash(k) % backingArraySize;
-	while(!backingArray[hashValue]->isNull){
-		if(!backingArray[hashValue]->isDel 
-			&& backingArray[hashValue]->k == k){
-			return backingArray[hashValue];
+	unsigned long hashValue = hash(k) % backingArraySize;
+	while(!backingArray[hashValue].isNull){
+		if(!backingArray[hashValue].isDel 
+			&& backingArray[hashValue].k == k){
+			return hashValue;
 		}
 		hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
 	}
