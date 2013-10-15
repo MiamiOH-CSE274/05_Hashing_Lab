@@ -79,6 +79,7 @@ void HashTable<Key,T>::remove(Key k){
   
 }
 
+//I would like to give some credit to shearar, I was having problems with this function when I saw that you could do it this easily.
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   //TODO
@@ -97,14 +98,16 @@ T HashTable<Key,T>::find(Key k){
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
-  return false;
+ unsigned long hasher= hash(k);
+ 
+ if(backingArray[hasher].isNull || backingArray[hasher].isDel){
+    return false;
 }
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
   //TODO
-  return 0;
+  return numItems;
 }
 
 template <class Key, class T>
