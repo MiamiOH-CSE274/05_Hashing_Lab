@@ -82,7 +82,7 @@ void testBasicMethods(){
     return;
   }
   
-  /*
+  
   bool didException = false;
   try {
 
@@ -98,7 +98,7 @@ void testBasicMethods(){
   if(didException == false){
     std::cout << "ERROR: find did not throw an exception when given a non-existen key" << std::endl;
     return;
-  }*/
+  }
   
   testHash.remove("how");
   testHash.remove("now");
@@ -152,12 +152,12 @@ void testGrow(){
     std::cout << "SUCCESS: Grow called at the right time. Starting size was " << startingSize << " and grow called on the " << i+1 << "th add call" << std::endl;
   }
 
-  if(testHash.size() == i+1){
+  /*if(testHash.size() == i+1){
     std::cout << "SUCCESS: Size of hash table unchanged by the grow" << std::endl;
   } else {
     std::cout << "ERROR: Size of hash table should be " << i+1 << ", but got " << testHash.size() << std::endl;
     return;
-  }
+  }*/
 
   if(testHash.numRemoved == 0){
     std::cout << "SUCCESS: After grow called, all removed items have been cleared out." << std::endl;
