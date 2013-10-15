@@ -7,7 +7,7 @@ HashTable<char,int> mySillyTable;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-	backingArray = new HashRecord();
+	backingArray = new HashRecord[13];
 	numItems = 0;
 	backingArraySize = 13;
 	numRemoved = 0;	
@@ -15,14 +15,14 @@ HashTable<Key,T>::HashTable(){
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  delete backingArray;
+  delete[] backingArray;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
 
 	if (numItems+numRemoved >= backingArraySize/2){
-		//grow();
+		grow();
 	}
 	
 	int place = hash(k);
@@ -31,7 +31,7 @@ void HashTable<Key,T>::add(Key k, T x){
 		
 			backingArray[index].x = x;
 			backingArray[index].isNull = false;
-			backingArray->k = k;
+			backingArray[index].k = k;
 			
 	numItems++;
 }
@@ -40,12 +40,14 @@ template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
 	
 	int place = hash(k);
-	int index = place%backingArraySize;
+	int index = place % backingArraySize;
 	int jump = 1 + (place % (backingArraySize - 1));
 	
 	backingArray[index].x = NULL;
 	
 	backingArray[index].isDel = true;
+	backingArray[index].isNull = false;
+	
 	numItems--;
 	numRemoved++;
 }
@@ -53,7 +55,7 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 	if (keyExists(k) == 0){
-		//throw (std::string) "invalid key";
+		throw (std::string) "invalid key";
 	}
 	int place = hash(k);
 	int index = place % backingArraySize;
@@ -84,7 +86,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 	int place = hash(k);
 	int index = place % backingArraySize;
 	
-	if (backingArray[index].isNull == false && backingArray[index].isDel == false){
+	if (backingArray[index].k == k && backingArray[index].isDel == false){
 		return true;
 	}
  	return false;
@@ -98,24 +100,24 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-	
- /* HashRecord* temp = new HashRecord();
-    HashTable<std::string,int> test = temp;
-	int cnt;
-	int size = backingArraySize;
-	for (int i = 0; i < size; i++){
-		temp.add(backingArray[i].k,backingArray[i].x);
-		temp[i] = backingArray[i];
-		temp->k = backingArray->k;
-		if (backingArraySize < hashPrimes[i]){
-			backingArraySize = hashPrimes[i];
-			HashTable temp = new HashTable[backingArraySize];
-			backingArray.add(temp[i]);
-	}
-	
-	
-	}
 
-backingArray = temp;
-delete temp;*/
+HashRecord* temp = backingArray;
+int tempSize = backingArraySize;
+//backingArray = new HashRecord[backingArraySize*2];
+
+//backingArraySize = backingArraySize*2;
+
+	for (int k = 0; k < 26; k++){
+		if (backingArraySize < hashPrimes[k]){
+			backingArray = new HashRecord[hashPrimes[k]];
+			backingArraySize = hashPrimes[k]; 
+			k = 30;
+			}
+	}
+	
+	for (int j = 0; j < tempSize; j++){
+		if (temp[j].isNull == false && temp[j].isDel == false)
+			add(temp[j].k, temp[j].x);
+	}
+	
 }
