@@ -4,9 +4,10 @@
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  backingArraySize = hashPrime[0];
-  backingArray = new hashRecord[hashPrimes[0]];
+  backingArraySize = hashPrimes[0];
+  backingArray = new HashRecord[hashPrimes[0]];
   numItems = 0;
+  numRemoved = 0;
 
 }
 
@@ -17,10 +18,16 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  int index = Hash(T);
+	if( numItems + numRemoved > backingArraySize/2){
+		grow();
+	}
+  
+  int place = hash(k);
+  int index = place % backingArraySize;
 
-  HashTable[index]->Key = Key;
-  HashTable[index]->T = T;
+  backingArray[index].x = x;
+  backingArray[index].isNull = false;
+  backingArray -> k = k;
 }
 
 template <class Key, class T>
@@ -43,8 +50,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
-  return 0;
+  return numItems;
 }
 
 template <class Key, class T>
