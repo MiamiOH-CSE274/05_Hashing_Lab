@@ -50,8 +50,14 @@ T HashTable<Key,T>::find(Key k){
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
-  return false;
+	bool exists;
+	int place = hash(k)%backingArraySize;
+		
+	if (backingArray[place] == k && backingArray[place].isDel == false)
+		exists = true;
+	else 
+		exists = false;
+   return exists;
 }
 
 template <class Key, class T>
