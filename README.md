@@ -35,4 +35,4 @@ Having only 'find' seemed better to me at first, since 'keyExists' calls 'find' 
 
 #### 3. What is one question that confused you about this exercise, or one piece of advice you would share with students next semester?
 
-The most confusing part of the project is getting it to build after calling hash() in your .ipp file.  It says that the function is not visible.
+The most confusing part of the project is getting it to build after calling hash() in your .ipp file.  It says that the function is not visible.  I copied it into HashTable.ipp form main.cpp in order to get it working.

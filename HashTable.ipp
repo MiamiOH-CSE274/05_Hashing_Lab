@@ -29,6 +29,7 @@ void HashTable<Key,T>::add(Key k, T x){
   unsigned long hashV = hash(k)%backingArraySize;
   backingArray[hashV].k = k;
   backingArray[hashV].x = x;
+  backingArray[hashV].isNull = false;
   numItems++;
   
   
@@ -36,19 +37,32 @@ void HashTable<Key,T>::add(Key k, T x){
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
+  unsigned long hashV = hash(k)%backingArraySize;
+  if (keyExists(k))
+    backingArray[hashV].isDel = true;
+  numItems--;
+  numRemoved++;
+    
   }
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  //TODO
-  T dummy;
-  return dummy;
+  unsigned long hashV = hash(k)%backingArraySize;
+  if (backingArray[hashV].k == k)
+    return backingArray[hashV].x;
+  else
+    throw std::string ("Key does not exist");
 }
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
+ try {
+   if (find(k))
+    return true;
+    }
+ catch (std::string s){
   return false;
+  }
 }
 
 template <class Key, class T>
