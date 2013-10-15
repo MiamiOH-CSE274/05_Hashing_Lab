@@ -32,4 +32,5 @@ Yours is a better solution, mostly because users are stupid. Allowing the user t
 
 #### 3. What is one question that confused you about this exercise, or one piece of advice you would share with students next semester?
 
+I did have a few problems with this lab, for some reason hash(k) wasn't working, which I fixed by rewriting the any method that used the hash that I was using, after referencing someone else's code, not entirely sure whose. The hashing method I had been using previously I don't think was actually giving me a consistent answer.
 I would tell students to start earlier than I did. Weekend jobs never go well. Especially on a 4 day weekend.
