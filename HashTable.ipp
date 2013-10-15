@@ -32,7 +32,13 @@ void HashTable<Key,T>::add(Key k, T x){
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
+  int place = hash(k)%backingArraySize;
+  while(!backingArray[remove].isNull || backingArray[remove].isDel){
+    backingArray[place].isNull = true;
+	backingArray[place].isDel = true;
+	numRemoved++;
+	numItems--;
+  }
 }
 
 template <class Key, class T>
