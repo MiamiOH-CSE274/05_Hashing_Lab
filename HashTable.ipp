@@ -61,7 +61,22 @@ void HashTable<Key,T>::add(Key k, T x){
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
+    unsigned long index = hash(k)%backingArraySize;
+  unsigned long current = index;
+  
+  while(!(backingArray[current].isNull))
+  if(backingArray[current].k==k){
+  backingArray[current].isDel=true;
+  backingArray[current].isNull=false;
+  
+  
+  numItems--;
+  numRemoved++;
+  }
+  
+  current=(current+current)%backingArraySize;
+  
+  
 }
 
 template <class Key, class T>
