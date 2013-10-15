@@ -24,7 +24,7 @@ void HashTable<Key,T>::add(Key k, T x){
   
   if (keyExists(k) == true)
     throw std::string ("Error: an entry with the same key already exists");
-  if ((2*(numItems + numRemoved)) >= backingArraySize)
+  if ((2*(numItems + numRemoved)) >= backingArraySize-1)
     grow ();
   int itemLocation = hash(k)%backingArraySize;
   while (backingArray[itemLocation].isNull == false && backingArray[itemLocation].isDel == false){
@@ -91,5 +91,25 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-  //TODO
+  
+  int hashPrimesCount = 0;
+  unsigned long newBackingArraySize = hashPrimes[hashPrimesCount];
+  while(newBackingArraySize <= backingArraySize){
+    hashPrimesCount++;
+	newBackingArraySize = hashPrimes[hashPrimesCount];
+  }
+
+  HashRecord* original = backingArray;
+  HashRecord* updated = new HashRecord[newBackingArraySize];
+  backingArray = updated;
+  backingArraySize = newBackingArraySize;
+  numItems = 0;
+  numRemoved = 0;
+  for (int index = 0; index < hashPrimes[hashPrimesCount-1]; index++){
+    if (original[index].isNull == false && original[index].isDel == false)
+	  add (original[index].k, original[index].x);
+  }
+
+  delete[] original;
+
 }
