@@ -2,6 +2,15 @@
 // remove
 #include <string>
 
+unsigned long hash(std::string k){
+  unsigned long m = hashPrimes[NUM_HASH_PRIMES-2];
+  unsigned long ret = 0;
+  for(int i=0;i<k.size();i++){
+    ret = (256*ret + k[i])%m;
+  }
+  return ret;
+}
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
  
