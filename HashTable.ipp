@@ -23,7 +23,7 @@ template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
   
   if (keyExists(k) == true)
-    std::string ("Error: an entry with the same key already exists");
+    throw std::string ("Error: an entry with the same key already exists");
   if ((2*(numItems + numRemoved)) >= backingArraySize)
     grow ();
   int itemLocation = hash(k)%backingArraySize;
@@ -39,7 +39,19 @@ void HashTable<Key,T>::add(Key k, T x){
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
+  
+  if (keyExists(k) == false)
+    throw std::string ("Error: no item with the given key exists");
+  int itemLocation = hash(k)%backingArraySize;
+  while (backingArray[itemLocation].isNull == false && backingArray[itemLocation].isDel == false){
+    if (backingArray[itemLocation].k == k){
+	  backingArray[itemLocation].isDel = true;
+	  numItems--;
+	  numRemoved++;
+	}
+	itemLocation = (itemLocation == backingArraySize-1) ? 0 : itemLocation + 1;
+  }
+
 }
 
 template <class Key, class T>
