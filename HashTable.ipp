@@ -2,6 +2,7 @@
 // remove
 #include <string>
 
+
 unsigned long hash(std::string k){
   unsigned long m = hashPrimes[NUM_HASH_PRIMES-2];
   unsigned long ret = 0;
@@ -11,10 +12,11 @@ unsigned long hash(std::string k){
   return ret;
 }
 
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
- 
- 
+
+
 // list of primes numbers
 backingArraySize=hashPrimes[0];
 
@@ -24,18 +26,27 @@ backingArray= new HashRecord[hashPrimes[0]];
 numItems=0;
 
 numRemoved=0;
- 
+
+  
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  delete[] backingArray;}
+  
+  
+  delete[] backingArray;
+
+
+}
+
+
+
+ 
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
-  
-     if(numItems + numRemoved >= backingArraySize/2)
+   
+   if(numItems + numRemoved >= backingArraySize/2)
    grow();
    
    
@@ -66,11 +77,11 @@ void HashTable<Key,T>::add(Key k, T x){
 
 
 }
-}
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-    unsigned long index = hash(k)%backingArraySize;
+ 
+  unsigned long index = hash(k)%backingArraySize;
   unsigned long current = index;
   
   while(!(backingArray[current].isNull))
@@ -84,44 +95,46 @@ void HashTable<Key,T>::remove(Key k){
   }
   
   current=(current+current)%backingArraySize;
-  
-  
+ 
+
 }
 
 //I would like to give some credit to shearar, I was having problems with this function when I saw that you could do it this easily.
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  //TODO
   if(!keyExists(k)){
   throw(std::string) "naa man, not here" ;}
   
   
   
-  
   T found=backingArray[hash(k)].x;
      return found;
-     
-     
-     
 }
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
- unsigned long hasher= hash(k);
+unsigned long hasher= hash(k);
  
  if(backingArray[hasher].isNull || backingArray[hasher].isDel){
     return false;
+  
+  
+  }
+  
+ 
+return true;
+
 }
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
   //TODO
-  return numItems;
+return numItems;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-       unsigned long primesThrough = 0;
+     unsigned long primesThrough = 0;
     
     
     while (backingArraySize>=hashPrimes[primesThrough]){
@@ -138,11 +151,12 @@ void HashTable<Key,T>::grow(){
     if (!(old[i].isNull) && !(old[i].isDel))
       add(old[i].k,old[i].x);
   }
-  delete[] old;
+  delete[]old;
 
 
 
 
   
   
+
 }
