@@ -27,13 +27,31 @@ void HashTable<Key,T>::add(Key k, T x){
 	
 	int place = hash(k);
 	int index = place % backingArraySize;
-	//int jump = 1 + (place % (backingArraySize - 1));
-		
-			backingArray[index].x = x;
-			backingArray[index].isNull = false;
-			backingArray[index].k = k;
-			
+	int jump = 1 + (place % (backingArraySize - 1));
+	
+	int i = index;
+	
+	bool added = false;
+	
+	while (added == false){
+	
+		if (backingArray[i].isNull == true){
+	
+			backingArray[i].x = x;
+			backingArray[i].isNull = false;
+			backingArray[i].k = k;
+	
+			added = true;
+		}
+	
+		else {
+			i = i + jump;			
+		}
+	
+	}
+	
 	numItems++;
+
 }
 
 template <class Key, class T>
@@ -54,30 +72,15 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
+	
 	if (keyExists(k) == 0){
 		throw (std::string) "invalid key";
 	}
+	
 	int place = hash(k);
 	int index = place % backingArraySize;
 
 	return backingArray[index].x;
-
-	/*HashRecord p;
-	p.k = k;
-	int place = hash(k);
-	int index = place % backingArraySize;
-	p.k = backingArray[index].k;
-	
-	int jump = 1 + (place%(backingArraySize - 1));
-	int i = index;
-	while (!backingArray[i].isNull) {
-		if (hash(backingArray[i].k) == index){
-			return backingArray[i].x;
-		}
-		else {
-			i = i + jump;
-		}
-	}*/
 }
 
 template <class Key, class T>
@@ -89,6 +92,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 	if (backingArray[index].k == k && backingArray[index].isDel == false){
 		return true;
 	}
+
  	return false;
 
 }
@@ -101,23 +105,27 @@ unsigned long HashTable<Key,T>::size(){
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
 
-HashRecord* temp = backingArray;
-int tempSize = backingArraySize;
-//backingArray = new HashRecord[backingArraySize*2];
-
-//backingArraySize = backingArraySize*2;
+	HashRecord* temp = backingArray;
+	
+	int tempSize = backingArraySize;
 
 	for (int k = 0; k < 26; k++){
+	
 		if (backingArraySize < hashPrimes[k]){
+	
 			backingArray = new HashRecord[hashPrimes[k]];
 			backingArraySize = hashPrimes[k]; 
 			k = 30;
+	
 			}
 	}
 	
 	for (int j = 0; j < tempSize; j++){
+	
 		if (temp[j].isNull == false && temp[j].isDel == false)
+	
 			add(temp[j].k, temp[j].x);
+	
 	}
 	
 }
