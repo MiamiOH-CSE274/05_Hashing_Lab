@@ -82,8 +82,17 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   //TODO
-  T dummy;
-  return dummy;
+  if(!keyExists(k)){
+  throw(std::string) "naa man, not here" ;}
+  
+  
+  
+  
+  T found=backingArray[hash(k)].x;
+     return found;
+     
+     
+     
 }
 
 template <class Key, class T>
