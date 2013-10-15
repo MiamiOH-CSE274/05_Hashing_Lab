@@ -25,8 +25,8 @@ Questions
 #### 1. Which of the above requirements work, and which do not? For each requirement, write a brief response.
 
 1. This requirement works.  keyExists, find, remove, and size are all 0(1).
-2. This requirement does not work. The add method works but I did not use linear probing. 
-3. I cannot tell if this requirement works due to the program freezing.
+2. This requirement works. The add method uses linear probing and is usually 0(1) except when grow is called.
+3. This requirement works. grow is 0(n) time.
 4. This requirement works.  Memory is not leaked.
 
 #### 2. I decided to use two function (`keyExists` and `find`) to enable lookup of keys. Another option would have been to have `find` return a `T*`, which would be `NULL` if an item with matching key is not found. Which design do you think would be better? Explain your reasoning. You may notice that the designers of C++ made the same decision I did when they designed http://www.cplusplus.com/reference/unordered_map/unordered_map/
