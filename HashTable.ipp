@@ -57,6 +57,8 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   
+  if (keyExists(k) == false)
+    throw std::string ("Error: the given key does not exist in the current directory");
   int itemLocation = hash(k)%backingArraySize;
   while (backingArray[itemLocation].isNull == false){
     if (backingArray[itemLocation].isDel == false && backingArray[itemLocation].k == k)
