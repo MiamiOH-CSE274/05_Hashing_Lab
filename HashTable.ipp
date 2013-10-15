@@ -5,36 +5,35 @@
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
 
+  backingArraySize = hashPrimes[0];
+  backingArray = new HashRecord[backingArraySize];
   numItems = 0;
   numRemoved = 0;
-  backingArraySize = hashPrimes[0];
 
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
   
-  int totalNumItems = numItems;
-  for (int index = 0; index < totalNumItems; index++){
-	remove (0);
-  }
-  backingArraySize = 0;
+  delete[] backingArray;
 
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
   
-  if (find(k) != NULL)
-    throw std::string ("Error: item already exists in memory");
+  if (keyExists(k) == true)
+    std::string ("Error: an entry with the same key already exists");
   if ((2*(numItems + numRemoved)) >= backingArraySize)
     grow ();
-  int itemLocation = hash(k);
+  int itemLocation = hash(k)%backingArraySize;
   while (backingArray[itemLocation].isNull == false && backingArray[itemLocation].isDel == false){
     itemLocation = (itemLocation == backingArraySize-1) ? 0 : itemLocation + 1;
   }
   numItems++;
-  backingArray[itemLocation] = x;
+  backingArray[itemLocation].isNull = false;
+  backingArray[itemLocation].k = k;
+  backingArray[itemLocation].x = x;
 
 }
 
@@ -46,10 +45,10 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   
-  int itemLocation = hash(k);
+  int itemLocation = hash(k)%backingArraySize;
   while (backingArray[itemLocation].isNull == false){
-    if (backingArray[itemLocation].isDel == false && backingArray[itemLocation] == k)
-	  return *backingArray[itemLocation];
+    if (backingArray[itemLocation].isDel == false && backingArray[itemLocation].k == k)
+	  return backingArray[itemLocation].x;
 	itemLocation = (itemLocation == backingArraySize-1) ? 0 : itemLocation + 1;
   }
   return NULL;
