@@ -4,7 +4,18 @@
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+ 
+ 
+// list of primes numbers
+backingArraySize=hashPrimes[0];
+
+//creates
+backingArray= new HashRecord[hashPrimes[0]];
+
+numItems=0;
+
+numRemoved=0;
+ 
 }
 
 template <class Key, class T>
