@@ -178,6 +178,6 @@ int main(){
   testCtor();
   testBasicMethods();
   testGrow();
-
+  std::cin.get();
   return 0;
 }

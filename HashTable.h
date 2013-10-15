@@ -59,9 +59,8 @@ private:
   // map to a different slot in the array. You may just want to use add()
   // after initializing the new array.
   void grow();
-
   unsigned long numItems; //Number of items in the hash table
-
+  
   //Note: Ordinarily, these OUGHT to be private. In this case I have
   // made them public for easy of testing.
  public:
