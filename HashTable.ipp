@@ -112,5 +112,28 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-  //TODO
+       unsigned long primesThrough = 0;
+    
+    
+    while (backingArraySize>=hashPrimes[primesThrough]){
+        
+        primesThrough++;
+        backingArraySize=hashPrimes[primesThrough];
+        }
+        
+
+  HashRecord* old= backingArray;
+  backingArray= new HashRecord[backingArraySize];
+
+  for (int i = 0; i < hashPrimes[primesThrough-1]; i++) {
+    if (!(old[i].isNull) && !(old[i].isDel))
+      add(old[i].k,old[i].x);
+  }
+  delete[] old;
+
+
+
+
+  
+  
 }
