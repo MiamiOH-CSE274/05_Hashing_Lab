@@ -138,12 +138,10 @@ void HashTable<Key,T>::grow()
    for(int i = 0;i<26;i++)
    {
 
-      if(backingArraySize == hashPrimes[i])
+      if(oldSize == hashPrimes[i])
 	  {
 	      //jump to next prime.
-		  i = i + 1;
-	      newSize = hashPrimes[i];
-		  i++;
+	      newSize = hashPrimes[i+1];
 	  }
    }
 
