@@ -31,8 +31,8 @@ Questions
 
 #### 2. I decided to use two function (`keyExists` and `find`) to enable lookup of keys. Another option would have been to have `find` return a `T*`, which would be `NULL` if an item with matching key is not found. Which design do you think would be better? Explain your reasoning. You may notice that the designers of C++ made the same decision I did when they designed http://www.cplusplus.com/reference/unordered_map/unordered_map/
 
-TODO
+Having only 'find' seemed better to me at first, since 'keyExists' calls 'find' anyway, and returns false if 'find' throws an exception.  But then I thought having 'find' return an object may be confusing.  You are getting a valid object T* as a return object, but you must then always check to see if T* is NULL.  Throwing an exception and using the 'keyExists' function seems like a slightly more safe way to lookup keys.
 
 #### 3. What is one question that confused you about this exercise, or one piece of advice you would share with students next semester?
 
-TODO
+The most confusing part of the project is getting it to build after calling hash() in your .ipp file.  It says that the function is not visible.  I copied it into HashTable.ipp form main.cpp in order to get it working.
