@@ -41,6 +41,7 @@ class HashTable : public USet <Key, T> {
   virtual void remove(Key k);
   virtual T find(Key k);
   virtual bool keyExists(Key k);
+  virtual int jump(Key k);
 
   //Initialize all private member variables.
   HashTable();
