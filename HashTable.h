@@ -50,7 +50,6 @@ class HashTable : public USet <Key, T> {
 private:
   //A pointer to the array that holds the hash table data
   HashRecord* backingArray;
-
   //Whenever numItems + numRemoved >= backingArraySize/2, call
   // grow(). grow() should make a new backing array that is twice the
   // size of the old one, similar to what we did in the ArrayQueue
@@ -60,9 +59,8 @@ private:
   // map to a different slot in the array. You may just want to use add()
   // after initializing the new array.
   void grow();
-
   unsigned long numItems; //Number of items in the hash table
-
+  
   //Note: Ordinarily, these OUGHT to be private. In this case I have
   // made them public for easy of testing.
  public:
