@@ -8,7 +8,6 @@ HashTable<Key,T>::HashTable(){
   backingArray = new HashRecord[backingArraySize];
   numItems = 0;
   numRemoved = 0;
-
 }
 
 template <class Key, class T>
@@ -51,19 +50,27 @@ void HashTable<Key,T>::add(Key k, T x){
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
+	unsigned long index = hash(k)%backingArraySize;
+	while(!(backingArray[index].isNull)){
+		if(k == backingArray[index].k) {
+			backingArray[index].isDel = true;
+			numItems--;
+			numRemoved++;
+        }//end iff
+		index += 1+(key%(numItems-1));
+	}//end while
 }
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-	if (keyExists(k)==false)
+	if(keyExists(k)==false)
 		throw std::string("Given key is non-existent in this table. Try another.");
 
 	unsigned long index = hash(k)%backingArraySize;
 	while(!(backingArray[index].isNull) || !(backingArray[index].isDel)){//checks if null or deleted
-			if(k == backingArray[index].k) //checks if key matches
-				return backingArray[index].x; //returns data if match
-			index = += 1+(key%(numItems-1)); //jumps if not a match
+		if(k == backingArray[index].k) //checks if key matches
+			return backingArray[index].x; //returns data if match
+		index += 1+(key%(numItems-1)); //jumps if not a match
 	}
 }
 
@@ -71,7 +78,7 @@ template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
 	unsigned long index = hash(k)%backingArraySize; //initial hash
 	while(!(backingArray[index].isNull)){//will always end up at a null value because we never have a full array, so the loop should not get stuck 
-		if ((backingArray[index].k == k)&& !(backingArray[index].isDel))
+		if((backingArray[index].k == k)&& !(backingArray[index].isDel))
 			return true;
         
 		index += 1+(key%(numItems-1)); //double hash/jumping
@@ -81,7 +88,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  return numItems;
+	return numItems;
 }
 
 template <class Key, class T>
