@@ -35,22 +35,16 @@ void HashTable<Key,T>::add(Key k, T x){
 	for(int i=0; i<backingArraySize; i++){//Can this be reduced to i<(backingArraySize/2)+1 and still guarantee all collisions will be handled?
 		curIndex += 1+(key%(numItems-1)); //minimum jump of 1
 
-		if(backingArray[curIndex].isNull){ //could this be done recursively perhaps? Would reduce code size, would decrease speed(I think)...
+		if(backingArray[curIndex].isNull || backingArray[curIndex].isDel){ //could this be done recursively perhaps? Would reduce code size, would decrease speed(I think)...
             backingArray[curIndex].isNull=false;
             backingArray[curIndex].k = k;
             backingArray[curIndex].x = x;
             numItems++;
+			if(backingArray[curIndex].isDel){
+				backingArray[curIndex].isDel=false;
+				numRemoved--;
+			}//end internal if
             return;
-		}//end if
-
-		if(backingArray[curIndex].isDel){
-          backingArray[curIndex].isDel=false;
-          backingArray[curIndex].isNull=false;
-          backingArray[curIndex].k = k;
-          backingArray[curIndex].x = x;
-          numRemoved--;
-          numItems++;
-          return;
 		}//end if
 	}//end for
 }
