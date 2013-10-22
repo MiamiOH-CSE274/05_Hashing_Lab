@@ -105,7 +105,7 @@ void HashTable<Key,T>::grow(){//already have a hashprimes array, simply move ind
 	numItems = 0; //value set to 0 due to creation of new hashtable
 	numRemoved = 0; //value set to 0 due to creation of new hashtable
 
-	for (int i=0; i < (int)hashPrimes[backingArraySize-1]; i++){ //cast to int dummy!
+	for (int i=0; i < (int)hashPrimes[hashPrimesPosition-1]; i++){ //cast to int dummy! -fixed which variable was being used to determine the copy count. Was not thinking...
 		if(!(initial[i].isNull) && !(initial[i].isDel)) //hmm, && or ||? && because you want neither a null item or a deleted one added.
 			add(initial[i].k,initial[i].x);
 	}
