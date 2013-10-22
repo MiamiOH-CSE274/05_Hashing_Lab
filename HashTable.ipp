@@ -4,12 +4,16 @@
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+  backingArraySize = hashPrimes[sizeOfArrayIndex];
+  backingArray = new HashRecord[backingArraySize];
+  numItems = 0;
+  numRemoved = 0;
+
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  delete[] backingArray;
 }
 
 template <class Key, class T>
