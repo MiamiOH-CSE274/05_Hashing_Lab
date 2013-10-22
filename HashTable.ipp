@@ -63,7 +63,13 @@ T HashTable<Key,T>::find(Key k){
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
+	unsigned long index = hash(k)%backingArraySize; //initial hash
+	while(!(backingArray[index].isNull)){//will always end up at a null value because we never have a full array, so the loop should not get stuck 
+		if ((backingArray[index].k == k)&& !(backingArray[index].isDel))
+			return true;
+        
+		index += 1+(key%(numItems-1)); //double hash/jumping
+	}//end while
   return false;
 }
 
