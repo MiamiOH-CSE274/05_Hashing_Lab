@@ -56,9 +56,15 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  //TODO
-  T dummy;
-  return dummy;
+	if (keyExists(k)==false)
+		throw std::string("Given key is non-existent in this table. Try another.");
+
+	unsigned long index = hash(k)%backingArraySize;
+	while(!(backingArray[index].isNull) || !(backingArray[index].isDel)){//checks if null or deleted
+			if(k == backingArray[index].k) //checks if key matches
+				return backingArray[index].x; //returns data if match
+			index = += 1+(key%(numItems-1)); //jumps if not a match
+	}
 }
 
 template <class Key, class T>
