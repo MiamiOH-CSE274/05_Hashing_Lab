@@ -4,10 +4,10 @@
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  backingArraySize = hashPrimes[sizeOfArrayIndex];
-  backingArray = new HashRecord[backingArraySize];
-  numItems = 0;
-  numRemoved = 0;
+	backingArraySize = hashPrimes[0];
+	backingArray = new HashRecord[backingArraySize];
+	numItems = 0;
+	numRemoved = 0;
 }
 
 template <class Key, class T>
@@ -22,25 +22,25 @@ void HashTable<Key,T>::add(Key k, T x){
 
 	unsigned long index = hash(k)%backingArraySize; //this is the initial hashing for the index. Jump for double hashing needs to be added later.
 
-	if(backingArray[curIndex].isNull){
-		backingArray[curIndex].isNull = false;
-        backingArray[curIndex].k = k;
-        backingArray[curIndex].x = x;
+	if(backingArray[index].isNull){
+		backingArray[index].isNull = false;
+        backingArray[index].k = k;
+        backingArray[index].x = x;
         numItems++;
         return; //get out to avoid double hashing when unnecessary.
 	}
 
-	//does backingArraySize need to be cast to an int for this comparison?
-	for(int i=0; i<backingArraySize; i++){//Can this be reduced to i<(backingArraySize/2)+1 and still guarantee all collisions will be handled?
-		curIndex += 1+(key%(numItems-1)); //minimum jump of 1
+	//backingArraySize needs to be cast to an int for this comparison!!! Dummy...
+	for(int i=0; i<(int)backingArraySize; i++){//Can this be reduced to i<(backingArraySize/2)+1 and still guarantee all collisions will be handled?
+		index = (index +(1+index%(backingArraySize-1)))%backingArraySize; //minimum jump of 1 -fixed k to index because I was not originally paying attention... key got converted to an unsigned long earlier...
 
-		if(backingArray[curIndex].isNull || backingArray[curIndex].isDel){ //could this be done recursively perhaps? Would reduce code size, would decrease speed(I think)...
-            backingArray[curIndex].isNull=false;
-            backingArray[curIndex].k = k;
-            backingArray[curIndex].x = x;
+		if(backingArray[index].isNull || backingArray[index].isDel){ //could this be done recursively perhaps? Would reduce code size, would decrease speed(I think)...
+            backingArray[index].isNull=false;
+            backingArray[index].k = k;
+            backingArray[index].x = x;
             numItems++;
-			if(backingArray[curIndex].isDel){
-				backingArray[curIndex].isDel=false;
+			if(backingArray[index].isDel){
+				backingArray[index].isDel=false;
 				numRemoved--;
 			}//end internal if
             return;
@@ -53,11 +53,11 @@ void HashTable<Key,T>::remove(Key k){
 	unsigned long index = hash(k)%backingArraySize;
 	while(!(backingArray[index].isNull)){
 		if(k == backingArray[index].k) {
-			backingArray[index].isDel = true;
+			backingArray[index].isDel = true; //could this be made better by perhaps eliminating isDel and simply turning backingArray[i].k = NULL? Would it make line 81 go faster?
 			numItems--;
 			numRemoved++;
         }//end iff
-		index += 1+(key%(numItems-1));
+		index = (index + (1+index%(backingArraySize-1)))%backingArraySize;
 	}//end while
 }
 
@@ -70,7 +70,7 @@ T HashTable<Key,T>::find(Key k){
 	while(!(backingArray[index].isNull) || !(backingArray[index].isDel)){//checks if null or deleted
 		if(k == backingArray[index].k) //checks if key matches
 			return backingArray[index].x; //returns data if match
-		index += 1+(key%(numItems-1)); //jumps if not a match
+		index = (index + (1+index%(backingArraySize-1)))%backingArraySize; //jumps if not a match
 	}
 }
 
@@ -81,7 +81,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 		if((backingArray[index].k == k)&& !(backingArray[index].isDel))
 			return true;
         
-		index += 1+(key%(numItems-1)); //double hash/jumping
+		index = (index + (1+index%(backingArraySize-1)))%backingArraySize; //double hash/jumping
 	}//end while
   return false;
 }
@@ -93,18 +93,23 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){//already have a hashprimes array, simply move index up one, then copy over old array.
-	sizeOfArrayIndex++;
+	int hashPrimesPosition = 0;
+	do{ //will happen at least once
+		hashPrimesPosition++;
+	}while(hashPrimes[hashPrimesPosition] <= backingArraySize);
 
-	HashRecord* newArray = new HashRecord[hashPrimes[sizeOfArrayIndex]];
-	backingArraySize = hashPrimes[sizeOfArrayIndex];
+	backingArraySize = hashPrimes[hashPrimesPosition];
+	HashRecord* initial = backingArray;
+	HashRecord* newArray = new HashRecord[backingArraySize];
+	backingArray = newArray;
 	numItems = 0; //value set to 0 due to creation of new hashtable
 	numRemoved = 0; //value set to 0 due to creation of new hashtable
 
-	for (int i=0; i < hashPrimes[sizeOfArrayIndex-1]; i++) {
-		if(!(backingArray[i].isNull) && !(backingArray[i].isDel)) //hmm, && or ||? && because you want neither a null item or a deleted one added.
-		newArray.add(backingArray[i].k,backingArray[i].x);
+	for (int i=0; i < (int)hashPrimes[backingArraySize-1]; i++){ //cast to int dummy!
+		if(!(initial[i].isNull) && !(initial[i].isDel)) //hmm, && or ||? && because you want neither a null item or a deleted one added.
+			add(initial[i].k,initial[i].x);
 	}
 
-	delete[]backingArray;
+	delete[]initial;
 	backingArray = newArray; //valid?
 }
