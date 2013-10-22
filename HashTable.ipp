@@ -18,7 +18,8 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+	if((numItems+numRemoved) >= (backingArraySize/2))//Make sure table load size never exceeds n/2 to avoid as many collisions as possible.
+		grow();
 }
 
 template <class Key, class T>
@@ -41,11 +42,23 @@ bool HashTable<Key,T>::keyExists(Key k){
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
-  return 0;
+  return numItems;
 }
 
 template <class Key, class T>
-void HashTable<Key,T>::grow(){
-  //TODO
+void HashTable<Key,T>::grow(){//already have a hashprimes array, simply move index up one, then copy over old array.
+  sizeOfArrayIndex++;
+
+  HashRecord* newArray = new HashRecord[hashPrimes[sizeOfArrayIndex]];
+  backingArraySize = hashPrimes[sizeOfArrayIndex];
+  numItems = 0; //value set to 0 due to creation of new hashtable
+  numRemoved = 0; //value set to 0 due to creation of new hashtable
+
+  for (int i=0; i < hashPrimes[sizeOfArrayIndex-1]; i++) {
+	if (!(backingArray[i].isNull) && !(backingArray[i].isDel)) //hmm, && or ||? && because you want neither a null item or a deleted one added.
+		newArray.add(backingArray[i].k,backingArray[i].x);
+  }
+
+  delete[]backingArray;
+  backingArray = newArray; //valid?
 }
