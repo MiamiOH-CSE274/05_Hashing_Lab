@@ -4,10 +4,18 @@
 #include <string>
 
 
+/**
+   Implement hash table by using double hashing.
+
+**/
+
+
 template <class Key, class T>
-HashTable<Key,T>::HashTable(){
-   //Check out hashPrimes header file.
-  backingArraySize = hashPrimes[NUM_HASH_PRIMES-2];
+HashTable<Key,T>::HashTable()
+{
+
+  //Check out hashPrimes header file.
+  backingArraySize = hashPrimes[0];
 
   backingArray = new HashRecord[backingArraySize];
 
@@ -25,63 +33,40 @@ HashTable<Key,T>::~HashTable() {
     delete[]backingArray;
 
     //Avoid dangling pointers.
-        backingArray = NULL;
+    backingArray = NULL;
 
 }
 
-//I moved hash function from main.
-//If you want to make this program runs successfully, you need to add hash(Key k) declaration in USet.h and HashTable.h
-template <class Key, class T>
-unsigned long HashTable<Key,T>::hash(Key k){
-  unsigned long m = hashPrimes[NUM_HASH_PRIMES-2];
-  unsigned long ret = 0;
-  for(int i=0;i<k.size();i++){
-    ret = (256*ret + k[i])%m;
-  }
-  return ret;
-}
 
 
 
 template <class Key, class T>
-void HashTable<Key,T>::add(Key k, T x){
-  //Whenever numItems + numRemoved >= backingArraySize/2, call
-  //grow(). grow() should make a new backing array that is twice the
-  //size of the old one, similar to what we did in the ArrayQueue
-  //lab.
-  // If an item with Key k already exists, overwrite it
+void HashTable<Key,T>::add(Key k, T x)
+{
+
+     //First one is double-hashing.
+
+     if( numItems + numRemoved >= backingArraySize/2 )
+     {
+        grow();
+     }
+
+     unsigned long index = hash(k) % backingArraySize;
 
 
-    if( numItems + numRemoved >= backingArraySize/2 ) grow();
+     while(backingArray[index].isNull == false && backingArray[index].k != k)
+     {
 
-    //You must define method called "hash" that takes a Key as input, and returns
-    //an unsigned long (which is the hash value)
+                index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
+     }
 
+          backingArray[index].x = x;
+          backingArray[index].k = k;
+          backingArray[index].isNull = false;
+          numItems++;
 
-     unsigned long hashValue = hash(k);
+     }
 
-        while( (backingArray[hashValue].isNull) == false && (backingArray[hashValue].isDel == false))
-        {
-
-         //Linear probing.
-         hashValue = (hashValue + 1) %  backingArraySize;
-
-        }
-
-        //Set data
-        backingArray[hashValue].x = x;
-
-        //Set key(hash value)
-        backingArray[hashValue].k = k;
-
-        //Slot now is not empty.
-    backingArray[hashValue].isNull = false;
-
-        //increment numItems
-        numItems++;
-
-
-}
 
 
  //If the slot used to have something in it, but doesn't now, set
@@ -91,27 +76,54 @@ void HashTable<Key,T>::add(Key k, T x){
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k)
 {
+    unsigned long index = hash(k) % backingArraySize;
 
-  if( keyExists(k) == false) {/*Do nothing*/}
+    if(keyExists(k) == false) {/*Do nothing*/}
 
-  backingArray[hash(k)].isNull = false;
+    for(int i = 0;i<(int)backingArraySize;i++)
+    {
 
-  backingArray[hash(k)].isDel = true;
+        if(backingArray[index].k == k)
+        {
+            backingArray[index].isNull = false;
+            backingArray[index].isDel = true;
+            numItems--;
+            numRemoved++;
+            break;
+        }
 
-  numItems--;
+        index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
 
-  numRemoved++;
-
+    }
 }
 
 template <class Key, class T>
-T HashTable<Key,T>::find(Key k){
+T HashTable<Key,T>::find(Key k)
+{
 
-   if(keyExists(k) == false) throw std::string("There is no such an element");
+   if(keyExists(k) == false)
+   {
+       throw std::string("There is no such an element");
 
-   //return data.
-   return backingArray[hash(k)].x;
+   }
 
+   else
+   {
+      unsigned long index = hash(k) % backingArraySize;
+
+      for(int i = 0;i<(int)backingArraySize;i++)
+      {
+
+          if(backingArray[index].k == k)
+          {
+              return (backingArray[index].x);
+          }
+
+          index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
+
+      }
+
+   }
 }
 
 
@@ -120,10 +132,28 @@ T HashTable<Key,T>::find(Key k){
 //isDel to true, and isNull to false. isNull is only for slots
 //that have never been used.
 template <class Key, class T>
-bool HashTable<Key,T>::keyExists(Key k){
-  if(backingArray[hash(k)].isNull == true || backingArray[hash(k)].isDel == true) return false;
-  return true;
+bool HashTable<Key,T>::keyExists(Key k)
+{
 
+
+      unsigned long index = hash(k) % backingArraySize;
+
+
+      for(int i = 0;i< (int)backingArraySize;i++)
+      {
+
+        if(backingArray[index].k == k && backingArray[index].isDel == false)
+          {
+                return true;
+
+          }
+
+          {
+            index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
+
+          }
+     }
+          return false;
 }
 
 template <class Key, class T>
@@ -166,10 +196,10 @@ void HashTable<Key,T>::grow()
                      add(temp[k].k,temp[k].x);
 
                  }
-                }
+            }
                 delete [] temp;
                 temp = NULL;
-
-
 }
+
+
 
