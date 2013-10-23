@@ -2,32 +2,43 @@
 //remove
 
 #include <string>
-#include "hashPrimes.h"
 
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  
-  backingArray = new HashRecord[53];
+   //Check out hashPrimes header file.
+  backingArraySize = hashPrimes[NUM_HASH_PRIMES-2];
+
+  backingArray = new HashRecord[backingArraySize];
 
   numItems = 0;
 
   numRemoved = 0;
 
-  //Check out hashPrimes header file.
-  backingArraySize = 53;
 
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  
+
     //deallocate the memory
     delete[]backingArray;
 
-    //Avoid dangling pointer.
-	backingArray = NULL;
+    //Avoid dangling pointers.
+        backingArray = NULL;
 
+}
+
+//I moved hash function from main.
+//If you want to make this program runs successfully, you need to add hash(Key k) declaration in USet.h and HashTable.h
+template <class Key, class T>
+unsigned long HashTable<Key,T>::hash(Key k){
+  unsigned long m = hashPrimes[NUM_HASH_PRIMES-2];
+  unsigned long ret = 0;
+  for(int i=0;i<k.size();i++){
+    ret = (256*ret + k[i])%m;
+  }
+  return ret;
 }
 
 
@@ -46,33 +57,28 @@ void HashTable<Key,T>::add(Key k, T x){
     //You must define method called "hash" that takes a Key as input, and returns
     //an unsigned long (which is the hash value)
 
- 
-    //I am so confused where is this hash function?
-	//Do I need to wirte my own hash function or using the hash function provided in main.cpp
-	//and move that to HashTable.ipp?
-	//I tested this program with my own hash function and it worked.
-	//No matter what, I assumed there is a hash function here.
+
      unsigned long hashValue = hash(k);
 
-	while( (backingArray[hashValue].isNull) == false && (backingArray[hashValue].isDel == false) ) 
-	{
-	 
-	 //Linear probing.
-	 hashValue = (hashValue + 1) %  backingArraySize;
+        while( (backingArray[hashValue].isNull) == false && (backingArray[hashValue].isDel == false))
+        {
 
-	}
+         //Linear probing.
+         hashValue = (hashValue + 1) %  backingArraySize;
 
-	//Set data
-	backingArray[hashValue].x = x;
+        }
 
-	//Set key(hash value)
-	backingArray[hashValue].k = k;
+        //Set data
+        backingArray[hashValue].x = x;
 
-	//Slot now is not empty.
+        //Set key(hash value)
+        backingArray[hashValue].k = k;
+
+        //Slot now is not empty.
     backingArray[hashValue].isNull = false;
 
-	//increment numItems
-	numItems++;
+        //increment numItems
+        numItems++;
 
 
 }
@@ -85,8 +91,8 @@ void HashTable<Key,T>::add(Key k, T x){
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k)
 {
-  
-  if( keyExists(k) == false) throw std::string("There is no such an element");
+
+  if( keyExists(k) == false) {/*Do nothing*/}
 
   backingArray[hash(k)].isNull = false;
 
@@ -115,7 +121,7 @@ T HashTable<Key,T>::find(Key k){
 //that have never been used.
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  if(backingArray[hash(k)].isNull == true || backingArray[hash(k)].isDel == false) return false;
+  if(backingArray[hash(k)].isNull == true || backingArray[hash(k)].isDel == true) return false;
   return true;
 
 }
@@ -131,7 +137,7 @@ unsigned long HashTable<Key,T>::size()
 template <class Key, class T>
 void HashTable<Key,T>::grow()
 {
-   
+
    int oldSize = backingArraySize;
    int newSize = 0;
 
@@ -139,30 +145,31 @@ void HashTable<Key,T>::grow()
    {
 
       if(oldSize == hashPrimes[i])
-	  {
-	      //jump to next prime.
-	      newSize = hashPrimes[i+1];
-	  }
+          {
+              //jump to next prime.
+              newSize = hashPrimes[i+1];
+          }
    }
 
-   HashRecord* temp = new HashRecord[newSize];
+   HashRecord* temp = backingArray;
+   backingArraySize = newSize;
+   backingArray = new HashRecord[backingArraySize];
 
+   //Re-calculating.
+   numItems = 0;
+   numRemoved = 0;
 
    for(int k = 0;k<oldSize;k++){
-      if( (backingArray[k].isNull) == false && (backingArray[k].isDel == false) ) 
-	     
-		 {
-		      int i = hash(backingArray[k]);
+      if( (temp[k].isNull) == false && (temp[k].isDel == false) )
 
-			  while(backingArray[i].isNull == false)
-			  {
-			       i = (i == newSize-1) ? 0 : i + 1;
-			  }
-			  temp [i] = backingArray[k];
+                 {
+                     add(temp[k].k,temp[k].x);
 
-		 }
-		}
-		backingArray = temp;
+                 }
+                }
+                delete [] temp;
+                temp = NULL;
+
 
 }
 
