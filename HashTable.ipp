@@ -11,6 +11,7 @@ Implementing hash lab by using double hashing.
 */
 
 
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable()
 {
@@ -51,16 +52,33 @@ void HashTable<Key,T>::add(Key k, T x)
      }
 
      unsigned long index = hash(k) % backingArraySize;
-     while(backingArray[index].isNull == false && backingArray[index].k != k)
+
+     //When the index is not NULL, check isDel.
+     while(backingArray[index].isNull == false )
      {
-            //Hash again if you find a already existent element.
+              //If item had not been deleted, check key matches.
+            if(backingArray[index].isDel == false)
+            {
+                if(backingArray[index].k == k)
+                {
+                      backingArray[index].x = x;
+
+                      backingArray[index].k = k;
+
+                      numItems++;
+                }
+            }
+            //If index is not Null but already been deleted, hash again.
             index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
      }
 
-          //Set variables.
+          //When index has never been used.
           backingArray[index].x = x;
+
           backingArray[index].k = k;
+
           backingArray[index].isNull = false;
+
           numItems++;
 
      }
@@ -80,12 +98,25 @@ void HashTable<Key,T>::remove(Key k)
     else
     {
        unsigned long index = hash(k) % backingArraySize;
-       backingArray[index].isNull = false;
-       backingArray[index].isDel = true;
-       numItems--;
-       numRemoved++;
+
+        //When the index is not NULL, check isDel.
+       while(backingArray[index].isNull == false)
+        {
+              //If item had not been deleted, check key matches.
+             if(backingArray[index].isDel == false)
+             {
+                  if(backingArray[index].k == k)
+                  {
+                      backingArray[index].isDel = true;
+                      backingArray[index].isNull = false;
+                      numItems--;
+                      numRemoved++;
+                  }
+             }
+             index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
+        }
     }
-  }
+}
 
 
 
@@ -99,19 +130,24 @@ T HashTable<Key,T>::find(Key k)
     }
     else
     {
+        unsigned long index = hash(k) % backingArraySize;
 
-        unsigned long index = hash(k)% backingArraySize;
-
-        while( (backingArray[index].isNull == false) || (backingArray[index].isDel == false))
+        while(backingArray[index].isNull == false)
+        {
+            if(backingArray[index].isDel == false)
             {
                 if(backingArray[index].k == k)
                 {
-                        return backingArray[index].x;
+                    return backingArray[index].x;
                 }
-               index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
+            }
+
+                index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
         }
     }
+
 }
+
 
 
 
@@ -125,15 +161,17 @@ bool HashTable<Key,T>::keyExists(Key k)
       while(backingArray[index].isNull == false)
       {
 
-        if(backingArray[index].k == k && backingArray[index].isDel == false)
+         if(backingArray[index].isDel == false)
           {
-                return true;
+             if(backingArray[index].k == k)
+             {
+                 return true;
+             }
           }
 
             index = (index + (1 + index % (backingArraySize-1))) % backingArraySize;
-
      }
-          return false;
+               return false;
 }
 
 template <class Key, class T>
@@ -180,7 +218,6 @@ void HashTable<Key,T>::grow()
                 delete [] temp;
                 temp = NULL;
 }
-
 
 
 
