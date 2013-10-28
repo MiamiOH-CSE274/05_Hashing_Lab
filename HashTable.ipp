@@ -161,11 +161,12 @@ void HashTable<Key,T>::grow(){
     backingArraySize = hashPrimes[newArraySize];
     
     numItems = 0;
+    numRemoved = 0;
 
 
     for (unsigned long i=0; i<newHtbackingArraySize; i++){
         if(!newHt[i].isNull && !newHt[i].isDel){
-            add(backingArray[i].k, backingArray[i].x);
+            add(newHt[i].k, newHt[i].x);
         }
     }
     delete [] newHt;
