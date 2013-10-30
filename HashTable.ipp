@@ -17,6 +17,7 @@ HashTable<Key,T>::~HashTable() {
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
+	//TODO: Check that k isn't already in the hash table
 	if((numItems+numRemoved) >= (backingArraySize/2))//Make sure table load size never exceeds n/2 to avoid as many collisions as possible.
 		grow();
 
@@ -31,6 +32,8 @@ void HashTable<Key,T>::add(Key k, T x){
 	}
 
 	//backingArraySize needs to be cast to an int for this comparison!!! Dummy...
+	
+	//TODO: jump should always be hash(k), not re-using index
 	for(int i=0; i<(int)backingArraySize; i++){//Can this be reduced to i<(backingArraySize/2)+1 and still guarantee all collisions will be handled?
 		index = (index +(1+index%(backingArraySize-1)))%backingArraySize; //minimum jump of 1 -fixed k to index because I was not originally paying attention... key got converted to an unsigned long earlier...
 
@@ -57,7 +60,7 @@ void HashTable<Key,T>::remove(Key k){
 			numItems--;
 			numRemoved++;
         }//end iff
-		index = (index + (1+index%(backingArraySize-1)))%backingArraySize;
+		index = (index + (1+index%(backingArraySize-1)))%backingArraySize; //TODO
 	}//end while
 }
 
@@ -70,7 +73,7 @@ T HashTable<Key,T>::find(Key k){
 	while(!(backingArray[index].isNull) || !(backingArray[index].isDel)){//checks if null or deleted
 		if(k == backingArray[index].k) //checks if key matches
 			return backingArray[index].x; //returns data if match
-		index = (index + (1+index%(backingArraySize-1)))%backingArraySize; //jumps if not a match
+		index = (index + (1+index%(backingArraySize-1)))%backingArraySize; //jumps if not a match //TODO
 	}
 }
 
@@ -81,7 +84,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 		if((backingArray[index].k == k)&& !(backingArray[index].isDel))
 			return true;
         
-		index = (index + (1+index%(backingArraySize-1)))%backingArraySize; //double hash/jumping
+		index = (index + (1+index%(backingArraySize-1)))%backingArraySize; //double hash/jumping //TODO
 	}//end while
   return false;
 }
