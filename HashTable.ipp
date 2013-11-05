@@ -30,9 +30,17 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-	//TODO
-	T dummy;
-	return dummy;
+	// Going to try and use T as the return type instead of int. 
+	T location = hash(k)%backingArraySize;
+	// Make sure spot is has not been total empty by using isNull
+	while(backingArray[location].isNull == false) {
+		// Make sure that there is something in the location and see if that
+		// locations.k is equal to the k that we were given
+		if (backingArray[location].isDel == false && backingArray[location].k == k)
+			return backingArray[location].x;
+		location = (location == backingArraySize-1) ? 0 : location + 1;
+	}
+	throw std::string("Couldn't find item!");
 }
 
 template <class Key, class T>
@@ -43,8 +51,7 @@ bool HashTable<Key,T>::keyExists(Key k){
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-	//TODO
-	return 0;
+	return numItems; 
 }
 
 template <class Key, class T>
