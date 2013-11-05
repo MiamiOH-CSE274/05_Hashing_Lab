@@ -19,8 +19,23 @@ HashTable<Key,T>::~HashTable() {
 }
 
 template <class Key, class T>
-void HashTable<Key,T>::add(Key k, T x){
-	//TODO
+void HashTable<Key,T>::add(Key k, T x){	
+	// Don't need to check if a key exists already
+	// because we are going to overwrite it if it does
+	if (2*(numRemoved + numItems) >= backingArraySize-1)
+		grow();
+
+	T location = hash(k)%backingArraySize;
+	
+	while(backingArray[location].isNull == false && backingArray[location].isDel == false) 
+		location = (location == backingArraySize-1) ? 0 : location + 1;
+	
+	// Update information
+	backingArray[location].k = k;
+	backingArray[location].x = x;
+	backingArray[location].isNull = false;
+	numItems++;
+	
 }
 
 template <class Key, class T>
