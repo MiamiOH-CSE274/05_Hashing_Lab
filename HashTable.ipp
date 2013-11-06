@@ -99,7 +99,7 @@ void HashTable<Key,T>::remove(Key k){
 
 }
 
-//I would like to give some credit to shearar, I was having problems with this function when I saw that you could do it this easily.
+//I would like to give some credit to the book and shear, I was having problems with this function until I saw that you could do it this easily.
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   if(!keyExists(k)){
