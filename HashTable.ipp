@@ -25,22 +25,38 @@ void HashTable<Key,T>::add(Key k, T x){
 	if (2*(numRemoved + numItems) >= backingArraySize-1)
 		grow();
 
-	T location = hash(k)%backingArraySize;
-	
+	int location = hash(k)%backingArraySize;
+
 	while(backingArray[location].isNull == false && backingArray[location].isDel == false) 
 		location = (location == backingArraySize-1) ? 0 : location + 1;
-	
+
 	// Update information
 	backingArray[location].k = k;
 	backingArray[location].x = x;
 	backingArray[location].isNull = false;
 	numItems++;
-	
+
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-	//TODO
+	// Including the if statement so that this method won't execute 
+	// if the key isn't there to remove. 
+	if (keyExists(k) == true) {
+		// Do nothing
+	} else {
+		int location = hash(k)%backingArraySize;
+
+		while(backingArray[location].isNull == false && backingArray[location].isDel == false) 
+			location = (location == backingArraySize-1) ? 0 : location + 1;
+
+		if(backingArray[location].k == k) {
+			backingArray[location].x = NULL;
+			backingArray[location].isDel = true;
+			numItems--;
+			numRemoved++;
+		}
+	}
 }
 
 template <class Key, class T>
