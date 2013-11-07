@@ -61,8 +61,7 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-	// Going to try and use T as the return type instead of int. 
-	T location = hash(k)%backingArraySize;
+	int location = hash(k)%backingArraySize;
 	// Make sure spot is has not been total empty by using isNull
 	while(backingArray[location].isNull == false) {
 		// Make sure that there is something in the location and see if that
@@ -76,7 +75,14 @@ T HashTable<Key,T>::find(Key k){
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-	//TODO
+	int location = hash(k)%backingArraySize;
+	// Make sure spot is has not been total empty by using isNull
+	while (backingArray[location].isNull == false) {
+		if (backingArray[location].isDel == false && backingArray[location].k == k)
+			return true;
+			location = (location == backingArraySize-1) ? 0 : location + 1;	
+	}
+	// If not found then return false
 	return false;
 }
 
