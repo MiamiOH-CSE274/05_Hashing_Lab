@@ -22,8 +22,6 @@ template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){	
 	// Don't need to check if a key exists already
 	// because we are going to overwrite it if it does
-
-
 	if (2*(numRemoved + numItems) >= backingArraySize-1)
 		grow();
 
@@ -88,24 +86,25 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-	int primesCount = 0;
-	int newSize = hashPrimes[primesCount];
+	int primesCount = 0; // Keeps track of what prime number we should be on
+	int newSize = hashPrimes[primesCount]; //new size of the new array
 	while (newSize <= backingArraySize) {
 		primesCount++;
 		newSize = hashPrimes[primesCount];
 	}
-	HashRecord* currentArray = backingArray;
-	HashRecord* temp = new HashRecord[newSize];
-	backingArray = temp;
+
+	HashRecord* currentArray = backingArray; // The original array
+	HashRecord* temp = new HashRecord[newSize]; // New array to point to
+	backingArray = temp; // Set the backingArray to the new pointer
 	backingArraySize = newSize;
 	numItems = 0;
 	numRemoved = 0;
 
-	for (int i = 0; i < hashPrimes[newSize-1]; i++) { // i < Size of the old array
+	for (int i = 0; i < hashPrimes[primesCount-1]; i++) { // i < Size of the old array
 		if (currentArray[i].isNull == false && currentArray[i].isDel == false) {
 			add (currentArray[i].k, currentArray[i].x);
 		}
-		// Make sure to delete the currentArray 
-		delete [] currentArray;
 	}
+	// Make sure to delete the original array  
+	delete [] currentArray;
 }
