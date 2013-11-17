@@ -19,6 +19,11 @@ Reading
 =======
 "Open Data Structures," Chapter 5, except for 5.2.3. http://opendatastructures.org/ods-cpp/5_Hash_Tables.html
 
+
+Running Time Analysis
+======================
+
+
 Questions
 =========
 
