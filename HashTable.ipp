@@ -10,7 +10,7 @@ template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   numItems = 0;
   numRemoved = 0;
-  backingArraySize = NUM_HASH_PRIMES;
+  backingArraySize = hashPrimes[0];
   backingArray = new HashRecord[backingArraySize];
 }
 
@@ -35,6 +35,7 @@ void HashTable<Key,T>::add(Key k, T x){
   numItems++;
   backingArray[hashValue].k = k;
   backingArray[hashValue].x = x;
+  backingArray[hashValue].isNull = false;
 }
 
 template <class Key, class T>
