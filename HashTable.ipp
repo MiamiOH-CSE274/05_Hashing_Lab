@@ -66,15 +66,12 @@ T HashTable<Key,T>::find(Key k){
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  unsigned long hashValue = hash(k) % backingArraySize;
-  while(!backingArray[hashValue].isNull){
-	if(!backingArray[hashValue].isDel
-		&& backingArray[hashValue].k == k){
-			return true;
-		}
-		hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
+  try{
+	find(k);
+  }catch(std::string a){
+	return false;
   }
-  return false;
+  return true;
 }
 
 template <class Key, class T>
