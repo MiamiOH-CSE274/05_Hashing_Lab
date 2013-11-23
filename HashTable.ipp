@@ -63,6 +63,7 @@ bool HashTable<Key,T>::keyExists(Key k){
  catch (std::string s){
   return false;
   }
+  return false;
 }
 
 template <class Key, class T>
@@ -73,12 +74,11 @@ unsigned long HashTable<Key,T>::size(){
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
   HashRecord* temp = new HashRecord[hashPrimes[1]];
-  for (int i = 0; i < backingArraySize; i++) {
+ /* for (int i = 0; i < backingArraySize; i++) {
     if (backingArray[i].isNull)
-      break;
-    if (backingArray[i].isDel) {
+      temp[i].isNull = true;
+    else if (backingArray[i].isDel) {
       temp[i].isDel = true;
-      break;
       }
     else
       temp[i]->k = backingArray[i]->k;
@@ -89,4 +89,14 @@ void HashTable<Key,T>::grow(){
     delete [] backingArray;
     backingArray = temp;
     temp = NULL;
+}*/
+
+    for (int k = 0; k < backingArraySize; k++){
+        if(backingArray[k].isNull == false && backingArray[k].isDel == false){
+            int i = hash(backingArray[k]);
+          while(temp[i].isNull == false)
+              temp[i] = backingArray[i];
+        }
+        backingArray = temp;
+    }
 }
