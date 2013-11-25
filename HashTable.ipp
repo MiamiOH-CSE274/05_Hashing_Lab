@@ -42,7 +42,7 @@ HashTable<Key,T>::~HashTable() {
 
 
  
-
+// modified from book
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
    
@@ -65,6 +65,8 @@ void HashTable<Key,T>::add(Key k, T x){
      backingArray[current].isNull = false;
      
      numItems=numItems+1;
+     
+
 
    
    
@@ -78,48 +80,51 @@ void HashTable<Key,T>::add(Key k, T x){
 
 }
 
+// modified from book
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
  
-  unsigned long index = hash(k)%backingArraySize;
+unsigned long index = hash(k)%backingArraySize;
   unsigned long current = index;
   
-  while(!(backingArray[current].isNull))
+  while(!(backingArray[current].isNull)){
   if(backingArray[current].k==k){
   backingArray[current].isDel=true;
   backingArray[current].isNull=false;
   
-  
-  numItems--;
-  numRemoved++;
   }
-  
-  current=(current+current)%backingArraySize;
- 
 
+
+ current = (current == numItems) ? 0 : current + 1;
+   }
+
+numItems--;
+numRemoved++;
 }
 
-//I would like to give some credit to shearar, I was having problems with this function when I saw that you could do it this easily.
+//from book
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   if(!keyExists(k)){
   throw(std::string) "naa man, not here" ;}
   
-  
-  
-  T found=backingArray[hash(k)].x;
+ T found=backingArray[hash(k)%backingArraySize].x;
      return found;
+     
+
 }
+
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-unsigned long hasher= hash(k);
+unsigned long hasher= hash(k)%backingArraySize;
  
- if(backingArray[hasher].isNull || backingArray[hasher].isDel){
+ if(backingArray[hasher].isNull==true || backingArray[hasher].isDel){
     return false;
+    }
   
   
-  }
+
   
  
 return true;
@@ -132,29 +137,38 @@ unsigned long HashTable<Key,T>::size(){
 return numItems;
 }
 
+
+// was havning problems with this method, used luoy6's code to help understand and make mine
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
+     
      unsigned long primesThrough = 0;
-    
-    
-    while (backingArraySize>=hashPrimes[primesThrough]){
+    if(backingArraySize>=hashPrimes[primesThrough])
         
         primesThrough++;
-        backingArraySize=hashPrimes[primesThrough];
-        }
+
+
         
 
   HashRecord* old= backingArray;
+  backingArraySize=hashPrimes[primesThrough];
   backingArray= new HashRecord[backingArraySize];
-
-  for (int i = 0; i < hashPrimes[primesThrough-1]; i++) {
+  numItems=0;
+int i = 0;
+  
+ while( i < hashPrimes[primesThrough-1] ) {
     if (!(old[i].isNull) && !(old[i].isDel))
       add(old[i].k,old[i].x);
+  i++;
   }
+  
+  
   delete[]old;
 
 
 
+   
+    
 
   
   
