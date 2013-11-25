@@ -19,6 +19,43 @@ Reading
 =======
 "Open Data Structures," Chapter 5, except for 5.2.3. http://opendatastructures.org/ods-cpp/5_Hash_Tables.html
 
+
+Running Time Analysis
+======================
+1. Add takes constant time O(1), unless it calls grow() method.
+if the add method calls grow(), then the running time would be O(n).
+The while loop takes constant time. This is because I am doing double
+hashing with my method, so the chance of collisions in the while loop
+is really low.Also, since I am using prime numbers for my my array size, and
+I am keeping the load factor 
+less than 1/2, When we call the grow function, 
+we are doubling the array size from previous size. 
+So every time when we call the grow function,  
+it significantly reduce the possibility to call grow function again. 
+
+2. Remove takes constant time O(1). Every line of code in the remove
+method takes constant time, including the while loop. The reason is 
+that I am doing double hashing with this method. So the chance of 
+collision is really low. 
+
+3. find takes constant time O(1). Here, I am assuming that the throw method
+call takes constant time. I am also calling keyExists method from 
+my class. I know that my keyExists method also takes constant time. 
+The while loop in the method takes constant time because I am using
+double hashing, so the chances of collision is really low. 
+
+4. keyExists method takes constant time O(1). The while loop in the 
+method takes constant time because I am suing double hashing, so
+the chances of collision is really low. 
+
+5. Size method takes constant time O(1). 
+
+6. Grow method takes linear time O(n). When I grow my backingArray, 
+I will have to copy the data from the old array to the new array. 
+so the running time is depending on the number of items in my 
+old backingArray n. 
+
+
 Questions
 =========
 
