@@ -61,6 +61,13 @@ private:
   // after initializing the new array.
   void grow();
 
+  //This helper method should take a key, and return the index for that
+  // item within the hash table. If the item already exists, return the
+  // index of the existing item. If the item doesn't exist, return the index
+  // where it OUGHT to be. This function can then be used as a helper method in
+  // your other methods.
+  unsigned long calcIndex(Key k);
+
   unsigned long numItems; //Number of items in the hash table
 
   //Note: Ordinarily, these OUGHT to be private. In this case I have
