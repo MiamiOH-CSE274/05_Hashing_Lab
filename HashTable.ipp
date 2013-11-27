@@ -13,6 +13,12 @@ HashTable<Key,T>::~HashTable() {
 }
 
 template <class Key, class T>
+unsigned long HashTable<Key,T>::calcIndex(Key k){
+  //TODO
+  return numItems; //This indicates failure, since it is an impossible value
+}
+
+template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
   //TODO
 }
