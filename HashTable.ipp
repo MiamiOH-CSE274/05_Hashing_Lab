@@ -18,9 +18,13 @@ HashTable<Key,T>::~HashTable() {
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
 
-	if(keyExists(k)){
-        T toChange = find(k);
-        toChange= x;
+	if(keyExists(k)){//correct this to change the T of existing record with key k to x
+        unsigned long searchIndex = hash(k)%backingArraySize;
+		while(backingArray[searchIndex].k != k){
+			searchIndex = (searchIndex+(1+hash(k)%(backingArraySize-1)))%backingArraySize;
+		}
+		backingArray[searchIndex].x = x;
+		return;
     }
 	if((numItems+numRemoved) >= (backingArraySize/2))//Make sure table load size never exceeds n/2 to avoid as many collisions as possible.
 		grow();
@@ -37,7 +41,7 @@ void HashTable<Key,T>::add(Key k, T x){
 
 	//backingArraySize needs to be cast to an int for this comparison!!! Dummy...
 	
-	for(int i=0; i<(int)backingArraySize; i++){//Can this be reduced to i<(backingArraySize/2)+1 and still guarantee all collisions will be handled?
+	for(unsigned long i=0; i<backingArraySize; i++){//Can this be reduced to i<(backingArraySize/2)+1 and still guarantee all collisions will be handled?
 		index = (index+(1+hash(k)%(backingArraySize-1)))%backingArraySize; //minimum jump of 1 -fixed k to index because I was not originally paying attention... key got converted to an unsigned long earlier...
 		if(backingArray[index].isNull || backingArray[index].isDel){ //could this be done recursively perhaps? Would reduce code size, would decrease speed(I think)...
             backingArray[index].isNull=false;
