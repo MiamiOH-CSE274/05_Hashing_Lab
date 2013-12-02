@@ -127,5 +127,6 @@ void HashTable<Key,T>::grow(){
 			add(temp[j].k, temp[j].x);
 	
 	}
+	delete[] temp;
 	
 }
