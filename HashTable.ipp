@@ -12,39 +12,29 @@
  
 
  }
- HashTable<std::string,int> mySillyTable;
-
+ //HashTable<std::string,int> mySillyTable;
+int hashPrimeIndex;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-int hashPrimeIndex=0;
- backingArraySize=hashPrimes[hashPrimeIndex];
 
-backingArray = new HashRecord[backingArraySize];
-   numItems=0;
-   numRemoved = 0;
- //isNull=true;
-// isNull=true;
+        hashPrimeIndex=1;
+    backingArraySize=hashPrimes[0];
+
+    backingArray = new HashRecord[hashPrimes[0]];
+
+    numItems=0;
+    numRemoved = 0;
+    
     //If the slot used to have something in it, but doesn't now, set
     // isDel to true, and isNull to false. isNull is only for slots
     // that have never been used
-  //  isDel=false;
-//isDel;
   
-  //Key k;
- // T x;
-
-
-
-
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-for (int i=0; i<backingArraySize; i++) {
-//remove(i);
-}
-
+    delete[] backingArray;
 }
 
 template <class Key, class T>
@@ -54,14 +44,23 @@ void HashTable<Key,T>::add(Key k, T x){
 //HashRecord temp = *new HashRecord(x);
 //temp.k = k;
 //temp.x = x;
+    
+    //Whenever numItems + numRemoved >= backingArraySize/2, call
+    // grow(). grow() should make a new backing array that is twice the
+    // size of the old one, similar to what we did in the ArrayQueue
+    // lab.
+    if (numItems + numRemoved >= backingArraySize/2) {
+        grow();
+    }
+    
+    
+    
 int index= hash(k)%backingArraySize;
 int jump = (hash(k)%(backingArraySize-1))+1;
 
     while (backingArray[index].isNull==false) {
 index=(index+jump) %backingArraySize;
 }
-//backingArray[hash(k)%backingArraySize].k=k;
-//backingArray[hash(k)%backingArraySize].x=x;
 backingArray[index].k=k;
 backingArray[index].x=x;
 
@@ -71,7 +70,7 @@ numItems++;
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
+
     //Remove the item with Key k. If there is no such item, do nothing.
     if (keyExists(k)==false) {
         return;
@@ -79,7 +78,7 @@ void HashTable<Key,T>::remove(Key k){
 int index= hash(k)%backingArraySize;
 int jump = (hash(k)%(backingArraySize-1))+1;
 
-    while (backingArray[index].isNull==false) {
+    while (backingArray[index].k!=k) {
 index=(index+jump) %backingArraySize;
 }
 backingArray[index].isDel=true;
@@ -96,20 +95,14 @@ T HashTable<Key,T>::find(Key k){
     //return backingArray[value];
     int index= hash(k)%backingArraySize;
     int jump = (hash(k)%(backingArraySize-1))+1;
-    
+    if (keyExists(k)==false) {
+          throw (std::string) "Key does not exist";
+    }
     while (backingArray[index].k!=k) {
-        if (backingArray[index].isNull==true) {
-            if (backingArray[index].isDel==true) {
-            throw (std::string) "Key does not exist";
-        }
-        }
-        index=index+jump;
+          index=(index+jump) %backingArraySize;
     }
         return backingArray[index].x;
     
-return backingArray[hash(k)%backingArraySize].x;
-  //T dummy;
-  //return dummy;
 }
 
 template <class Key, class T>
@@ -117,16 +110,26 @@ bool HashTable<Key,T>::keyExists(Key k){
     int index= hash(k)%backingArraySize;
     int jump = (hash(k)%(backingArraySize-1))+1;
     
-    while (backingArray[index].k!=k) {
-        if (backingArray[index].isNull==true) {
-            if (backingArray[index].isDel==true) {
-            return false;
-            }
-        }
-        index=index+jump;
-    }
-        return true;
     
+    
+    while (backingArray[index].k!=k) {
+        index=(index+jump) %backingArraySize;
+        if (backingArray[index].isNull==true) {
+            return false;
+        }
+        
+        
+    }
+    if (backingArray[index].isDel==true) {
+        return false;
+    }
+    return true;
+//    if (backingArray[index].isDel==true) {
+//        return false;
+//    }
+//    else {
+//        return true;
+//    }
 }
 
 template <class Key, class T>
@@ -138,23 +141,28 @@ unsigned long HashTable<Key,T>::size(){
 
 template <class Key, class T>
 void HashTable<Key,T>::grow(){
-//  //T* newArray = new T[hash[currentHashPrime+1]];
-//    //or HashTable* H = new T[hash[currentHashPrime+1]];
-//    hashPrimeIndex++;
-//    HashRecord* oldArray = backingArray;
-//    HashRecord* tempArray = new HashRecord[hashPrimes[hashPrimeIndex]];
-//    backingArray=tempArray;
-////old attributes here.
-////    int oldNumItems = numItems;
-////    int oldNumRemoved = numRemoved;
-////    int oldHashPrimeIndex = hashPrimeIndex;
-//    for (int i=0; i<backingArraySize; i++) {
-//    if (oldArray[i].isNull==false && oldArray[i].isDel==false){
-//        add(oldArray[i]);
-//
-//    }
-    //delete[]backingArray;
-//    numItems = oldNumItems;
-//    numRemoved=oldNumRemoved;
-//    hashPrimeIndex=oldHashPrimeIndex;
+    
+    //looked at https://github.com/MiamiOH-CSE274/05_Hashing_Lab/blob/continnd/HashTable.ipp
+    //but didn't make any changes as I am still stuck in a permanent lupe.
+    //update: changed hashPrimeIndex to global variable and seems to have removed the loop.
+    
+    
+    //worked on grow method at office hours.
+    
+    
+    int oldBackingArraySize = backingArraySize;
+
+    HashRecord* oldArray = backingArray;
+    backingArray = new HashRecord[hashPrimes[hashPrimeIndex]];
+    backingArraySize = hashPrimes[hashPrimeIndex];
+    hashPrimeIndex++;
+    //reset numItems before reinserting as add increments numItems.
+    numItems = 0;
+    for (int i=0; i<oldBackingArraySize; i++){
+        if(!(oldArray[i].isNull) && oldArray[i].isDel==false)
+            add(oldArray[i].k, oldArray[i].x);
+    }
+    //deallocate memory.
+    delete[] oldArray;
+    
 }
