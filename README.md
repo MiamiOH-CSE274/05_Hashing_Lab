@@ -21,7 +21,7 @@ Questions
 
 #### 1. Which of the above requirements work, and which do not? For each requirement, write a brief response.
 
-1. `keyExists`, `find`, `remove`, and `size` all be O(1)
+1. `keyExists`, `find`, `remove`, and `size` all are O(1)
 2. add uses linear probing (double hashing)
 3. grow is O(n) as we have to loop through and add again to new array.
 4. does not leak memory.
