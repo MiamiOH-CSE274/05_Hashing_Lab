@@ -41,7 +41,6 @@ class HashTable : public USet <Key, T> {
   virtual void remove(Key k);
   virtual T find(Key k);
   virtual bool keyExists(Key k);
-  virtual int jump(Key k);
 
   //Initialize all private member variables.
   HashTable();
@@ -51,6 +50,8 @@ class HashTable : public USet <Key, T> {
 private:
   //A pointer to the array that holds the hash table data
   HashRecord* backingArray;
+  
+  virtual int jump(Key k);
 
   //Whenever numItems + numRemoved >= backingArraySize/2, call
   // grow(). grow() should make a new backing array that is twice the
