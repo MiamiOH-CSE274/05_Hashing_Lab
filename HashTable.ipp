@@ -34,7 +34,7 @@ void HashTable<Key,T>::add(Key k, T x){
   //     - If no collision: plop that sucker in there and change isNull and isDel
   // Increment numItems by 1
 
-  if(2*(numRemoved+numItems)>=backingArraySize){
+  if(2*(numRemoved+numItems)>=backingArraySize-1){
 	grow();
   }
   int i = hash(k)%backingArraySize;
