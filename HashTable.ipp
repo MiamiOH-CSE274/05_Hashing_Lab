@@ -90,10 +90,17 @@ T HashTable<Key,T>::find(Key k){
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
-  return false;
-
+ 
   // Pretty much the same thing as find, but return boolean values
+    int i = hash(k)%backingArraySize;
+  while(backingArray[i].isNull==false)
+  {
+	if(backingArray[i].isDel == false && backingArray[i].k == k)
+		return true;
+	i=i++;
+	i=i%backingArraySize;
+  }
+  return false;
 
 }
 
