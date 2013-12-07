@@ -2,11 +2,15 @@
 // remove
 #include <string>
 
+unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+HashTable<char,int> mySillyTable;
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){ 
 
   //Creating a new HashTable
   backingArray = new HashRecord[hashPrimes[0]];
+  numItems = 0;
 
 }
 
@@ -28,6 +32,9 @@ void HashTable<Key,T>::add(Key k, T x){
   //     - If no collision: plop that sucker in there and change isNull and isDel
   // Increment numItems by 1
 
+
+  numItems++;
+
 }
 
 template <class Key, class T>
@@ -37,7 +44,10 @@ void HashTable<Key,T>::remove(Key k){
   //     - Keep comparing the key to the index's key while
   //       incrementing the index by 1 while isNull is false 
   // On find: Set the data to null, set isDel to true,
-  //          decrement numItems and numRemoved
+  //          decrement numItems and increment numRemoved
+
+  numItems--;
+  numRemoved++;
 
 }
 
@@ -64,7 +74,7 @@ template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
 
   // Return the size of the backing array
-  return 0;
+  return numItems;
 
 }
 
@@ -76,5 +86,6 @@ void HashTable<Key,T>::grow(){
   // Change the flags back to zeroes
   // Change our pointer to the new array
   // Delete the old array
+
 
 }
