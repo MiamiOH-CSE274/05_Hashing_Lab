@@ -12,6 +12,7 @@ HashTable<Key,T>::HashTable(){
   backingArraySize = hashPrimes[0];
   backingArray = new HashRecord[backingArraySize];
   numItems = 0;
+  numRemoved = 0;
 
 }
 
