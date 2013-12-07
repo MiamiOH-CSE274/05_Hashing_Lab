@@ -85,6 +85,9 @@ T HashTable<Key,T>::find(Key k){
 	i=i++;
 	i=i%backingArraySize;
   }
+  
+  //We didn't find it, captain.
+  throw std::string("Your item doesn't exist, captain!");
 
 }
 
