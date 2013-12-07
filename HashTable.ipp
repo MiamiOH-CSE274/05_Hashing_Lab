@@ -135,17 +135,31 @@ void HashTable<Key,T>::grow(){
   // Delete the old array
   //std::cout << "backingArraySize" << backingArraySize << std::endl;
 
-  HashRecord* deleteMeEventually = backingArray;
-
-  int biggerSize=0;
-  for(int i=0; biggerSize<=backingArraySize; i++)
-  {
-	biggerSize=hashPrimes[i];
-	backingArraySize=hashPrimes[i];
-  }
   
+  unsigned long biggerSize=0;
+  unsigned long currentHashPrime = 0;
+  /*for(int i=0; biggerSize<=backingArraySize; i++)
+  {
+	currentHashPrime++;
+	biggerSize=hashPrimes[currentHashPrime];
+	backingArraySize=hashPrimes[currentHashPrime];
+  }*/
 
+  while(backingArraySize>=hashPrimes[currentHashPrime]){
+	currentHashPrime++;
+  }
 
+  HashRecord* oldBackingArray = backingArray;
+  backingArraySize = biggerSize;
+  backingArray = new HashRecord[backingArraySize];
+  numItems=0;
 
+  for(unsigned long i=0; i<hashPrimes[currentHashPrime-1]; i++) {
+	if(!oldBackingArray[i].isNull&&!oldBackingArray[i].isDel)
+		add(backingArray[i].k, backingArray[i].x);
+  }
 
+  delete [] oldBackingArray;
+  
+  
 }
