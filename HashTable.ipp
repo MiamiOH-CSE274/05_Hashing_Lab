@@ -61,8 +61,17 @@ void HashTable<Key,T>::remove(Key k){
   // On find: Set the data to null, set isDel to true,
   //          decrement numItems and increment numRemoved
 
-  numItems--;
-  numRemoved++;
+  int i = hash(k)%backingArraySize;
+  while(backingArray[i].isNull==false)
+  {
+	if(backingArray[i].isDel == false && backingArray[i].k == k){
+		backingArray[i].isDel = true;
+		numItems--;
+		numRemoved++;}
+	i=i++;
+	i=i%backingArraySize;
+  }
+
 
 }
 
