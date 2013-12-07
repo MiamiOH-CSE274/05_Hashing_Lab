@@ -54,10 +54,20 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
   //TODO
-  T dummy;
-  return dummy;
+  //T dummy;
+  //return dummy;
 
+  // Hash the data and then find where we should put it
+  // Afterwards, check the position (HashRecord has isNull and isDel)
+  //     - If collision: move down a spot and keep checking
+  //     - If no collision: plop that sucker in there and change isNull and isDel
+  // Increment numItems by 1
   // Same as remove, but on find return the data of the index
+
+  for(int i = hask(k)%backingArraySize; backingArray[i].isNull==false; i++%backingArraySize){
+	if(backingArray[i].k == k && backingArray[i].isDel == false)
+		return backingArray[i].x;
+  }
 
 }
 
