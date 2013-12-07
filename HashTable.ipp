@@ -133,21 +133,19 @@ void HashTable<Key,T>::grow(){
   // Change the flags back to zeroes
   // Change our pointer to the new array
   // Delete the old array
+  //std::cout << "backingArraySize" << backingArraySize << std::endl;
 
-  /*int biggerSize=0;
-  for(int i=0; biggerSize<backingArraySize; i++)
+  HashRecord* deleteMeEventually = backingArray;
+
+  int biggerSize=0;
+  for(int i=0; biggerSize<=backingArraySize; i++)
   {
 	biggerSize=hashPrimes[i];
+	backingArraySize=hashPrimes[i];
   }
+  
 
-  newBackingArray = new HashRecord[biggerSize];
-  for(int i=0; i<backingArraySize; i++)
-  {
-	newBackingArray.add(backingArray[i]);
-  */ 
 
-  // Uh... shit.
 
-  // Why the hell is it hanging in the test case??
 
 }
