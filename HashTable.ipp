@@ -148,7 +148,8 @@ void HashTable<Key,T>::grow(){
   while(backingArraySize>=hashPrimes[currentHashPrime]){
 	currentHashPrime++;
   }
-
+  biggerSize=hashPrimes[currentHashPrime];
+  
   HashRecord* oldBackingArray = backingArray;
   backingArraySize = biggerSize;
   backingArray = new HashRecord[backingArraySize];
