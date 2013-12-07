@@ -33,7 +33,20 @@ void HashTable<Key,T>::add(Key k, T x){
   //     - If no collision: plop that sucker in there and change isNull and isDel
   // Increment numItems by 1
 
+  if(2*(numRemoved+numItems)>=backingArraySize){
+	grow();
+  }
+  int i = hash(k)%backingArraySize;
+  while(backingArray[i].isNull==false && backingArray[i].isDel==false)
+  {
+		i=i++;
+		i=i%backingArraySize;
+  }
 
+  // We're now at the place to add
+  backingArray[i].x=x;
+  backingArray[i].k=k;
+  backingArray[i].isNull==false;
   numItems++;
 
 }
