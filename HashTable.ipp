@@ -46,7 +46,7 @@ void HashTable<Key,T>::add(Key k, T x){
   // We're now at the place to add
   backingArray[i].x=x;
   backingArray[i].k=k;
-  backingArray[i].isNull==false;
+  backingArray[i].isNull=false;
   numItems++;
 
 }
