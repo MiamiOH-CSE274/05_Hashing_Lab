@@ -9,7 +9,8 @@ template <class Key, class T>
 HashTable<Key,T>::HashTable(){ 
 
   //Creating a new HashTable
-  backingArray = new HashRecord[hashPrimes[0]];
+  backingArraySize = hashPrimes[0];
+  backingArray = new HashRecord[backingArraySize];
   numItems = 0;
 
 }
@@ -53,20 +54,23 @@ void HashTable<Key,T>::remove(Key k){
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  //TODO
-  //T dummy;
-  //return dummy;
 
-  // Hash the data and then find where we should put it
-  // Afterwards, check the position (HashRecord has isNull and isDel)
-  //     - If collision: move down a spot and keep checking
-  //     - If no collision: plop that sucker in there and change isNull and isDel
-  // Increment numItems by 1
-  // Same as remove, but on find return the data of the index
+  // Hash the data and then iterate through trying to find it
+  //  - check the position using HashRecord isNull and isDel)
+  // If found, return it, else keep iterating so long as it isn't null
 
-  for(int i = hask(k)%backingArraySize; backingArray[i].isNull==false; i++%backingArraySize){
+  /*for(int i = hask(k)%backingArraySize; backingArray[i].isNull==false; i++%backingArraySize){
 	if(backingArray[i].k == k && backingArray[i].isDel == false)
 		return backingArray[i].x;
+  }*/
+
+  int i = hash(k)%backingArraySize;
+  while(backingArray[i].isNull==false)
+  {
+	if(backingArray[i].isDel == false && backingArray[i].k == k)
+		return backingArray[i].x;
+	i=i++;
+	i=i%backingArraySize;
   }
 
 }
