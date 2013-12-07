@@ -134,5 +134,18 @@ void HashTable<Key,T>::grow(){
   // Change our pointer to the new array
   // Delete the old array
 
+  /*int biggerSize=0;
+  for(int i=0; biggerSize<backingArraySize; i++)
+  {
+	biggerSize=hashPrimes[i];
+  }
+
+  newBackingArray = new HashRecord[biggerSize];
+  for(int i=0; i<backingArraySize; i++)
+  {
+	newBackingArray.add(backingArray[i]);
+  */ 
+
+  // Uh... shit.
 
 }
