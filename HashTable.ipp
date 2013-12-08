@@ -92,8 +92,8 @@ T HashTable<Key,T>::find(Key k){
 		return backingArray[pos].x;
 	else {
 		for(int i = 0; i < backingArraySize; i++) {
-			if(backingArray[(pos + i)%backingArraySize].k == k)
-				return backingArray[(pos + i)%backingArraySize].x;
+			if(backingArray[(pos + i)%backingArraySize-1].k == k)
+				return backingArray[(pos + i)%backingArraySize-1].x;
 		}
 	}
   }
@@ -110,10 +110,11 @@ bool HashTable<Key,T>::keyExists(Key k){
 	return true;
   else {
 	for(int i = 0; i < backingArraySize; i++) {
-		if(backingArray[(pos + i)%backingArraySize].k == k)
-			return backingArray[(pos + i)%backingArraySize].x;
+		if(backingArray[(pos + i)%backingArraySize-1].k == k)
+			return true;
 	}
   }
+  return false;
 }
 
 //Return the number of items currently in the USet
