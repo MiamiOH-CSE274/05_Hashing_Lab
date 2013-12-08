@@ -27,7 +27,6 @@ void HashTable<Key,T>::add(Key k, T x){
 
   //Going to try to use the textbook's linear probing method
   
-
   if(numItems + numRemoved >= backingArraySize/2) {
 	grow();
   }
@@ -122,6 +121,8 @@ void HashTable<Key,T>::grow(){
 
   HashRecord* delBackingArray = backingArray;
   HashRecord* newBackingArray = new HashRecord[newBackingArraySize];
+  numItems = 0;
+  numRemoved = 0;
 
   //Check if we are out of memory and throw and exception if so
   if(newBackingArray == NULL)
