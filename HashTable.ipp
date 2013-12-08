@@ -1,10 +1,8 @@
 //You will need this so you can make a string to throw in
 // remove
 #include <string>
-
-//unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
-//HashTable<char,int> mySillyTable;
-
+//Most of this was written using the book's methods from 5.2 regarding linear probing
+//After many failed attempts of writing the methods from scratch based off logic
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   //Initialize Variables
@@ -45,16 +43,15 @@ void HashTable<Key,T>::add(Key k, T x){
 //Remove the item with Key k. If there is no such item, do nothing.
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
+
 	unsigned long pos = hash(k)%backingArraySize;
 	
 	//Issues so also switching to book method
 	while (!backingArray[pos].isNull) {
       if (!backingArray[pos].isDel && backingArray[pos].k == k) {
         backingArray[pos].isDel = true;
-		backingArray[pos].isNull = true;
         numItems--;
 		numRemoved++;
-        if (numItems + numRemoved >= backingArraySize/2) grow(); 
       }
       pos = (pos == backingArraySize-1) ? 0 : pos + 1;
     }
