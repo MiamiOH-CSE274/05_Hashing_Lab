@@ -129,7 +129,7 @@ void HashTable<Key,T>::grow(){
   //Set the old array's address location to the new array's location
   backingArray = newBackingArray;
 
-  //Double the array size variable
+  //Change the size variable to new size from hashPrimes
   backingArraySize = newBackingArraySize;
   
   //Copy the old array's contents to the new array
