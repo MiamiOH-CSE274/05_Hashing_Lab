@@ -49,7 +49,9 @@ void HashTable<Key,T>::add(Key k, T x){
 //Remove the item with Key k. If there is no such item, do nothing.
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
- 
+	int pos = hash(k);
+
+	if(table[pos] = )
 }
 
  //Return the item with Key k. 
@@ -57,11 +59,11 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 
-  int j = hash(k);
+  int pos = hash(k);
   T dummy = null;
   
-  for (int i = 0; i < t[j].size(); i++) {
-	dummy = t[j].get(i);
+  for (int i = 0; i < backingArraySize; i++) {
+	dummy = table[(pos + i)%backingArraySize];
     if (k == dummy)
 		return dummy;
   }
