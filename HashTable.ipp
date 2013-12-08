@@ -80,7 +80,7 @@ template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 
   unsigned long pos = hash(k);
-  Key dummy = null;
+  Key dummy;
   
   for (unsigned long i = 0; i < backingArraySize; i++) {
 	dummy = backingArray[(pos + i)%backingArraySize].k;
@@ -116,18 +116,34 @@ template <class Key, class T>
 void HashTable<Key,T>::grow(){
 
   //Re-used some code from the grow() method of my Queue Lab
-  T* newBackingArray = new T[backingArraySize*2];
+  int newBackingArraySize = backingArraySize;
+
+  for(int i = 0 i < NUM_HASH_PRIMES; i++) {
+	if(backingArraySize < hashPrimes[i]) {
+		newBackingArraySize == hashPrimes[i];
+		break;
+	}
+  }
+
+  HashRecord* newBackingArray = new HashRecord[newBackingArraySize];
 
   //Check if we are out of memory and throw and exception if so
   if(newBackingArray == NULL)
 	throw std::string("Error");
   
   //Copy the old array's contents to the new array
-  for (unsigned long i = 0; i < numItems; i++)
-	//Use add() method to add items to new array
+  //Using book example for this method (5.2)
+  for (unsigned long i = 0; i < backingArraySize; i++) {
+	if(!backingArray[i].isNull && !backingArray[i].isDel) {
+		int j = hash(backingArray[i]);
+		while(!newBackingArray.isNull)
+			j = (j == newBackingArraySize - 1) ? 0 : i + 1;
+		newBackingArray[j] = backingArray[i];
+	}
+  }
 	
   //Double the array size variable
-	backingArraySize = backingArraySize*2;
+	backingArraySize = newBackingArraySize;
 
   //De-allocate the old array
   delete[] backingArray;
