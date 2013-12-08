@@ -44,7 +44,7 @@ void HashTable<Key,T>::add(Key k, T x){
 			backingArray[(pos + i)%backingArraySize].x = x;
 			backingArray[(pos + i)%backingArraySize].isNull = false;
 			numItems++; 
-			return;
+			break;
 		}
 	}
   }
@@ -83,23 +83,37 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 
-  unsigned long pos = hash(k);
-  Key dummy;
-  
-  for (unsigned long i = 0; i < backingArraySize; i++) {
-	dummy = backingArray[(pos + i)%backingArraySize].k;
-    if (k == dummy)
-		return backingArray[(pos + i)%backingArraySize].x;
+  if(!keyExists(k))
+	throw std::string("Does not exist");
+  else {
+	int pos = hash(k)%backingArraySize;
+
+	if(backingArray[pos].k == k)
+		return backingArray[pos].x;
+	else {
+		for(int i = 0; i < backingArraySize; i++) {
+			if(backingArray[(pos + i)%backingArraySize].k == k)
+				return backingArray[(pos + i)%backingArraySize].x;
+		}
+	}
   }
-  throw std::string("That is an invalid input");
 }
 
 //Return true if there is an item with Key k in the table. If not,
 // return false
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
-  return false;
+  
+  int pos = hash(k)%backingArraySize;
+  
+  if(backingArray[pos].k == k)
+	return true;
+  else {
+	for(int i = 0; i < backingArraySize; i++) {
+		if(backingArray[(pos + i)%backingArraySize].k == k)
+			return backingArray[(pos + i)%backingArraySize].x;
+	}
+  }
 }
 
 //Return the number of items currently in the USet
