@@ -108,6 +108,7 @@ void HashTable<Key,T>::grow(){
 
   //Re-used some code from the grow() method of my Queue Lab
   int newBackingArraySize = backingArraySize;
+  int delBackingArraySize = backingArraySize;
 
   for(int i = 0; i < NUM_HASH_PRIMES; i++) {
 	if(backingArraySize < hashPrimes[i]) {
@@ -127,20 +128,19 @@ void HashTable<Key,T>::grow(){
 
   //Set the old array's address location to the new array's location
   backingArray = newBackingArray;
+
+  //Double the array size variable
+  backingArraySize = newBackingArraySize;
   
   //Copy the old array's contents to the new array
   //Using book example for this method (5.2)
-  for (unsigned long i = 0; i < backingArraySize; i++) {
+  for (unsigned long i = 0; i < delBackingArraySize; i++) {
 	if(!delBackingArray[i].isNull && !delBackingArray[i].isDel) {
 		add(delBackingArray[i].k, delBackingArray[i].x);
 	}
   }
-	
-  //Double the array size variable
-	backingArraySize = newBackingArraySize;
 
   //De-allocate the old array
   delete[] delBackingArray;
-
   
 }
