@@ -2,6 +2,8 @@
 // remove
 #include <string>
 
+unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
   //Initialize Variables
@@ -83,20 +85,16 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 
-  if(!keyExists(k))
-	throw std::string("Does not exist");
-  else {
-	int pos = hash(k)%backingArraySize;
+  //Crashing at the moment, going to try switching to book method
 
-	if(backingArray[pos].k == k)
-		return backingArray[pos].x;
-	else {
-		for(int i = 0; i < backingArraySize; i++) {
-			if(backingArray[(pos + i)%backingArraySize-1].k == k)
-				return backingArray[(pos + i)%backingArraySize-1].x;
-		}
-	}
+  int pos = hash(x)%backingArraySize;
+
+  while (!backingArray[pos].isNull) {
+    if (backingArray[pos].isDel && backingArray[pos].k == k) return backingArray[pos].x;
+	   pos = (pos == backingArraySize-1) ? 0 : pos + 1;
   }
+    
+  return 0;
 }
 
 //Return true if there is an item with Key k in the table. If not,
