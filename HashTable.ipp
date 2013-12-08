@@ -8,7 +8,7 @@ HashTable<Key,T>::HashTable(){
   numItems = 0;
   numRemoved = 0;
   backingArraySize = hashPrimes[0];
-  HashRecord[] table = new HashRecord[backingArraySize];
+  backingArray = new HashRecord[backingArraySize];
 }
 
 template <class Key, class T>
@@ -23,23 +23,23 @@ template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
 
   //Going to try to use the textbook's linear probing method
-  int pos = hash(k);
+  unsigned long pos = hash(k);
 
   if(numItems + numRemoved >= backingArraySize/2) {
 	grow();
   }
 
-  if(table[pos].isNull) {
-	table[pos] = x;
-	table[pos].isNull = false;
+  if(backingArray[pos].isNull) {
+	backingArray[pos].x = x;
+	backingArray[pos].isNull = false;
 	numItems++;
   }
 
   else {
 	for(int i = 0; i < backingArraySize; i++) {
-		if(table[(pos + i)%backingArraySize].isNull) {
-			table[(pos + i)%backingArraySize] = x;
-			table[(pos + i)%backingArraySize].isNull = false;
+		if(backingArray[(pos + i)%backingArraySize].isNull) {
+			backingArray[(pos + i)%backingArraySize].x = x;
+			backingArray[(pos + i)%backingArraySize].isNull = false;
 			numItems++; 
 		}
 	}
@@ -49,9 +49,9 @@ void HashTable<Key,T>::add(Key k, T x){
 //Remove the item with Key k. If there is no such item, do nothing.
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-	int pos = hash(k);
+	unsigned long pos = hash(k);
 
-	if(table[pos] = )
+	if(backingArray[pos] = )
 }
 
  //Return the item with Key k. 
@@ -59,13 +59,13 @@ void HashTable<Key,T>::remove(Key k){
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
 
-  int pos = hash(k);
-  T dummy = null;
+  unsigned long pos = hash(k);
+  Key dummy = null;
   
-  for (int i = 0; i < backingArraySize; i++) {
-	dummy = table[(pos + i)%backingArraySize];
+  for (unsigned long i = 0; i < backingArraySize; i++) {
+	dummy = backingArray[(pos + i)%backingArraySize].k;
     if (k == dummy)
-		return dummy;
+		return backingArray[(pos + i)%backingArraySize].x;
   }
   throw std::string("That is an invalid input");
 }
