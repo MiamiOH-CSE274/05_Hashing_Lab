@@ -4,19 +4,47 @@
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+  //Initialize Variables
+  numItems = 0;
+  numRemoved = 0;
+  backingArraySize = hashPrimes[0];
+  HashRecord[] table = new HashRecord[backingArraySize];
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  //De-allocate memory that was used to remove chance of memory leaks
+  delete[] backingArray;
 }
 
 //Add a new item, x, with Key k.
-// If an item with Key k already exists, overwrite it
+//If an item with Key k already exists, overwrite it
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+
+  //Going to try to use the textbook's linear probing method
+  int pos = hash(k);
+  bool isFull = false;
+
+
+
+  if(table[pos].isNull) {
+	table[pos] = x;
+  }
+
+  for(int i = 0; i < backingArraySize; i++) {
+	if((table[pos + i]%backingArraySize).isNull) {
+		table[pos + i]%backingArraySize = x;
+	}
+	else if (i == (backingArraySize - 1))
+		isFull == true;
+  }
+
+  if(isFull) {
+	grow();
+
+  }
+
 }
 
 //Remove the item with Key k. If there is no such item, do nothing.
@@ -29,12 +57,16 @@ void HashTable<Key,T>::remove(Key k){
  // If there is no such item, throw an exception.
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  int j = hash(x);
-    for (int i = 0; i < t[j].size(); i++)
-	  T dummy = t[j].get(i);
-      if (x == dummy)
-        return dummy;
-    throw std::string("That is an invalid input");
+
+  int j = hash(k);
+  T dummy = null;
+  
+  for (int i = 0; i < t[j].size(); i++) {
+	dummy = t[j].get(i);
+    if (k == dummy)
+		return dummy;
+  }
+  throw std::string("That is an invalid input");
 }
 
 //Return true if there is an item with Key k in the table. If not,
@@ -48,7 +80,6 @@ bool HashTable<Key,T>::keyExists(Key k){
 //Return the number of items currently in the USet
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
   return numItems;
 }
 
