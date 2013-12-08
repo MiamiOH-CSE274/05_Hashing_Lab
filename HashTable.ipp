@@ -3,6 +3,7 @@
 #include <string>
 
 unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+HashTable<char,int> mySillyTable;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
@@ -33,23 +34,13 @@ void HashTable<Key,T>::add(Key k, T x){
 
   unsigned long pos = hash(k)%backingArraySize;
 
-  if(backingArray[pos].isNull) {
-    backingArray[pos].k = k;
-	backingArray[pos].x = x;
-	backingArray[pos].isNull = false;
-	numItems++;
-  }
-
-  else {
-	for(int i = 0; i < backingArraySize; i++) {
-		if(backingArray[(pos + i)%backingArraySize].isNull) {
-			backingArray[(pos + i)%backingArraySize].x = x;
-			backingArray[(pos + i)%backingArraySize].isNull = false;
-			numItems++; 
-			break;
-		}
-	}
-  }
+  while (!backingArray[pos].isNull && !backingArray[pos].isDel)
+      pos = (pos == backingArraySize-1) ? 0 : pos + 1;
+  
+  backingArray[pos].k = k;
+  backingArray[pos].x = x;
+  backingArray[pos].isNull = false;
+  numItems++;
 }
 
 //Remove the item with Key k. If there is no such item, do nothing.
@@ -87,14 +78,14 @@ T HashTable<Key,T>::find(Key k){
 
   //Crashing at the moment, going to try switching to book method
 
-  int pos = hash(x)%backingArraySize;
+  int pos = hash(k)%backingArraySize;
 
   while (!backingArray[pos].isNull) {
-    if (backingArray[pos].isDel && backingArray[pos].k == k) return backingArray[pos].x;
+    if (!backingArray[pos].isDel && backingArray[pos].k == k) return backingArray[pos].x;
 	   pos = (pos == backingArraySize-1) ? 0 : pos + 1;
   }
     
-  return 0;
+  throw std::string("Key not found");
 }
 
 //Return true if there is an item with Key k in the table. If not,
@@ -102,17 +93,14 @@ T HashTable<Key,T>::find(Key k){
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
   
+  //Was having errors with previous code so using book notation
   int pos = hash(k)%backingArraySize;
   
-  if(backingArray[pos].k == k)
-	return true;
-  else {
-	for(int i = 0; i < backingArraySize; i++) {
-		if(backingArray[(pos + i)%backingArraySize-1].k == k)
-			return true;
-	}
-  }
-  return false;
+    while (!backingArray[pos].isNull) {
+      if (!backingArray[pos].isDel && backingArray[pos].k == k) return true;
+      pos = (pos == backingArraySize-1) ? 0 : pos + 1;
+    }
+    return false;
 }
 
 //Return the number of items currently in the USet
