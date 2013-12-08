@@ -24,27 +24,26 @@ void HashTable<Key,T>::add(Key k, T x){
 
   //Going to try to use the textbook's linear probing method
   int pos = hash(k);
-  bool isFull = false;
 
-
+  if(numItems + numRemoved >= backingArraySize/2) {
+	grow();
+  }
 
   if(table[pos].isNull) {
 	table[pos] = x;
+	table[pos].isNull = false;
+	numItems++;
   }
 
-  for(int i = 0; i < backingArraySize; i++) {
-	if((table[pos + i]%backingArraySize).isNull) {
-		table[pos + i]%backingArraySize = x;
+  else {
+	for(int i = 0; i < backingArraySize; i++) {
+		if(table[(pos + i)%backingArraySize].isNull) {
+			table[(pos + i)%backingArraySize] = x;
+			table[(pos + i)%backingArraySize].isNull = false;
+			numItems++; 
+		}
 	}
-	else if (i == (backingArraySize - 1))
-		isFull == true;
   }
-
-  if(isFull) {
-	grow();
-
-  }
-
 }
 
 //Remove the item with Key k. If there is no such item, do nothing.
