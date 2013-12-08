@@ -118,27 +118,28 @@ void HashTable<Key,T>::grow(){
   //Re-used some code from the grow() method of my Queue Lab
   int newBackingArraySize = backingArraySize;
 
-  for(int i = 0 i < NUM_HASH_PRIMES; i++) {
+  for(int i = 0; i < NUM_HASH_PRIMES; i++) {
 	if(backingArraySize < hashPrimes[i]) {
-		newBackingArraySize == hashPrimes[i];
+		newBackingArraySize = hashPrimes[i];
 		break;
 	}
   }
 
+  HashRecord* delBackingArray = backingArray;
   HashRecord* newBackingArray = new HashRecord[newBackingArraySize];
 
   //Check if we are out of memory and throw and exception if so
   if(newBackingArray == NULL)
 	throw std::string("Error");
+
+  //Set the old array's address location to the new array's location
+  backingArray = newBackingArray;
   
   //Copy the old array's contents to the new array
   //Using book example for this method (5.2)
   for (unsigned long i = 0; i < backingArraySize; i++) {
-	if(!backingArray[i].isNull && !backingArray[i].isDel) {
-		int j = hash(backingArray[i]);
-		while(!newBackingArray.isNull)
-			j = (j == newBackingArraySize - 1) ? 0 : i + 1;
-		newBackingArray[j] = backingArray[i];
+	if(!delBackingArray[i].isNull && !delBackingArray[i].isDel) {
+		add(delBackingArray[i].k, delBackingArray[i].x);
 	}
   }
 	
@@ -146,8 +147,7 @@ void HashTable<Key,T>::grow(){
 	backingArraySize = newBackingArraySize;
 
   //De-allocate the old array
-  delete[] backingArray;
+  delete[] delBackingArray;
 
-  //Set the old array's address location to the new array's location
-  backingArray = newBackingArray;
+  
 }
