@@ -51,7 +51,27 @@ template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
 	unsigned long pos = hash(k);
 
-	if(backingArray[pos] = )
+	if(keyExists(k)) {
+
+		if(backingArray[pos].k == k) {
+			backingArray[pos].isNull = true;
+			backingArray[pos].isDel  = true;
+			numItems--;
+			numRemoved++;
+		}
+
+		else {
+
+			for(int i = 0; i < backingArraySize; i++) {
+				if(backingArray[(pos + i)%backingArraySize].k == k) {
+					backingArray[(pos + i)%backingArraySize].isNull = true;
+					backingArray[(pos + i)%backingArraySize].isDel  = true;
+					numItems--;
+					numRemoved++;
+				}
+			}	
+		}
+	}
 }
 
  //Return the item with Key k. 
