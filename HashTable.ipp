@@ -2,8 +2,8 @@
 // remove
 #include <string>
 
-unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
-HashTable<char,int> mySillyTable;
+//unsigned long hash(char c){ return 10*((unsigned long)c)%13; }
+//HashTable<char,int> mySillyTable;
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
@@ -46,29 +46,19 @@ void HashTable<Key,T>::add(Key k, T x){
 //Remove the item with Key k. If there is no such item, do nothing.
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-	unsigned long pos = hash(k);
-
-	if(keyExists(k)) {
-
-		if(backingArray[pos].k == k) {
-			backingArray[pos].isNull = true;
-			backingArray[pos].isDel  = true;
-			numItems--;
-			numRemoved++;
-		}
-
-		else {
-
-			for(int i = 0; i < backingArraySize; i++) {
-				if(backingArray[(pos + i)%backingArraySize].k == k) {
-					backingArray[(pos + i)%backingArraySize].isNull = true;
-					backingArray[(pos + i)%backingArraySize].isDel  = true;
-					numItems--;
-					numRemoved++;
-				}
-			}	
-		}
-	}
+	unsigned long pos = hash(k)%backingArraySize;
+	
+	//Issues so also switching to book method
+	while (!backingArray[pos].isNull) {
+      if (!backingArray[pos].isDel && backingArray[pos].k == k) {
+        backingArray[pos].isDel = true;
+		backingArray[pos].isNull = true;
+        numItems--;
+		numRemoved++;
+        if (numItems + numRemoved >= backingArraySize/2) grow(); 
+      }
+      pos = (pos == backingArraySize-1) ? 0 : pos + 1;
+    }
 }
 
  //Return the item with Key k. 
