@@ -23,13 +23,16 @@ template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
 
   //Going to try to use the textbook's linear probing method
-  unsigned long pos = hash(k);
+  
 
   if(numItems + numRemoved >= backingArraySize/2) {
 	grow();
   }
 
+  unsigned long pos = hash(k)%backingArraySize;
+
   if(backingArray[pos].isNull) {
+    backingArray[pos].k = k;
 	backingArray[pos].x = x;
 	backingArray[pos].isNull = false;
 	numItems++;
@@ -41,6 +44,7 @@ void HashTable<Key,T>::add(Key k, T x){
 			backingArray[(pos + i)%backingArraySize].x = x;
 			backingArray[(pos + i)%backingArraySize].isNull = false;
 			numItems++; 
+			return;
 		}
 	}
   }
