@@ -182,6 +182,8 @@ unsigned long HashTable<Key,T>::size()
 
 }
 
+
+
 template <class Key, class T>
 void HashTable<Key,T>::grow()
 {
@@ -202,6 +204,9 @@ void HashTable<Key,T>::grow()
    HashRecord* temp = backingArray;
    backingArraySize = newSize;
    backingArray = new HashRecord[backingArraySize];
+
+
+//Here teaching assistant Akshaya's code let me know that I need to re-set variables to make it works.
 
    //Re-calculating.
    numItems = 0;
