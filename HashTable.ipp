@@ -1,47 +1,102 @@
 //You will need this so you can make a string to throw in
 // remove
+// This Lab was implemented based on the reading materia
+// http://opendatastructures.org/ods-cpp/5_2_Linear_Probing.html 
 #include <string>
+
+unsigned long hash(class Key);
 
 template <class Key, class T>
 HashTable<Key,T>::HashTable(){
-  //TODO
+  numItems = 0;
+  numRemoved = 0;
+  backingArraySize = hashPrimes[0];
+  backingArray = new HashRecord[backingArraySize];
 }
 
 template <class Key, class T>
 HashTable<Key,T>::~HashTable() {
-  //TODO
+  delete[] backingArray;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::add(Key k, T x){
-  //TODO
+  if(numItems + 1 + numRemoved >= backingArraySize / 2){
+	grow();
+  }
+  unsigned long hashValue = hash(k) % backingArraySize;
+  while(!backingArray[hashValue].isNull &&
+   !backingArray[hashValue].isDel){
+		hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
+		}
+  if(backingArray[hashValue].isDel){
+	backingArray[hashValue].isDel = false;
+  }
+  numItems++;
+  backingArray[hashValue].k = k;
+  backingArray[hashValue].x = x;
+  backingArray[hashValue].isNull = false;
 }
 
 template <class Key, class T>
 void HashTable<Key,T>::remove(Key k){
-  //TODO
+  unsigned long hashValue = hash(k) % backingArraySize;
+  while(!backingArray[hashValue].isNull){
+	if(!backingArray[hashValue].isDel && backingArray[hashValue].k ==k){
+		backingArray[hashValue].isDel = true;
+		numItems--;
+		numRemoved++;
+	}
+	hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
+  }
 }
 
 template <class Key, class T>
 T HashTable<Key,T>::find(Key k){
-  //TODO
-  T dummy;
-  return dummy;
+	unsigned long hashValue = hash(k) % backingArraySize;
+	while(!backingArray[hashValue].isNull){
+		if(!backingArray[hashValue].isDel 
+			&& backingArray[hashValue].k == k){
+			return backingArray[hashValue].x;
+		}
+		hashValue = (hashValue == backingArraySize - 1) ? 0 : hashValue + 1;
+	}
+	throw (std::string) "No such a key in the hash table.";
 }
 
 template <class Key, class T>
 bool HashTable<Key,T>::keyExists(Key k){
-  //TODO
-  return false;
+  try{
+	find(k);
+  }catch(std::string a){
+	return false;
+  }
+  return true;
 }
 
 template <class Key, class T>
 unsigned long HashTable<Key,T>::size(){
-  //TODO
-  return 0;
+  return numItems;
 }
 
 template <class Key, class T>
-void HashTable<Key,T>::grow(){
-  //TODO
+void HashTable<Key,T>::grow(){  
+ int oldSize = backingArraySize;      
+ int index = 0;
+ while(hashPrimes[index] <= backingArraySize &&
+  index != NUM_HASH_PRIMES - 1){
+	index = index + 1;
+  }
+  backingArraySize = hashPrimes[index];
+  HashRecord* temp = new HashRecord[backingArraySize];
+  HashRecord* removal = backingArray;
+  backingArray = temp;
+  numItems = 0;
+  numRemoved = 0;
+  for(int i = 0; i < oldSize; i++){
+        if(!removal[i].isNull && !removal[i].isDel){                
+                add(removal[i].k, removal[i].x);
+                }
+  }
+  delete[] removal;
 }
