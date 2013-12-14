@@ -24,7 +24,7 @@ Questions
 
 #### 1. Which of the above requirements work, and which do not? For each requirement, write a brief response.
 
-1. This requirement works.  keyExists, find, remove, and size are all 0(1).
+1. This requirement works.  keyExists, find, remove, and size are all 0(1) on average.
 2. This requirement works. The add method uses linear probing and is usually 0(1) except when grow is called.
 3. This requirement works. grow is 0(n) time.
 4. This requirement works.  Memory is not leaked.

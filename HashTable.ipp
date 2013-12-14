@@ -27,7 +27,6 @@ void HashTable<Key,T>::add(Key k, T x){
 	
 	int place = hash(k);
 	int index = place % backingArraySize;
-	int jump = 1 + (place % (backingArraySize - 1));
 	
 	int i = index;
 	
@@ -45,7 +44,7 @@ void HashTable<Key,T>::add(Key k, T x){
 		}
 	
 		else {
-			i = i + jump;			
+			i = i + 1;			
 		}
 	
 	}
@@ -59,15 +58,29 @@ void HashTable<Key,T>::remove(Key k){
 	
 	int place = hash(k);
 	int index = place % backingArraySize;
-	int jump = 1 + (place % (backingArraySize - 1));
+		
+	int i = index;
 	
-	backingArray[index].x = NULL;
+	bool removed = false;
 	
-	backingArray[index].isDel = true;
-	backingArray[index].isNull = false;
+	while (removed == false){
 	
-	numItems--;
-	numRemoved++;
+		if (backingArray[i].k == k){
+			backingArray[index].x = NULL;
+	
+			backingArray[index].isDel = true;
+			backingArray[index].isNull = false;
+	
+			numItems--;
+			numRemoved++;
+			
+			removed = true;
+		}
+	
+		else {
+			i = i + 1;			
+		}
+	}
 }
 
 template <class Key, class T>
@@ -80,7 +93,20 @@ T HashTable<Key,T>::find(Key k){
 	int place = hash(k);
 	int index = place % backingArraySize;
 
-	return backingArray[index].x;
+	int i = index;
+	
+	while (backingArray[i].isNull == false){
+	
+		if (backingArray[i].k == k){
+			return backingArray[index].x;	
+		}
+	
+		else {
+			i = i + 1;			
+		}
+	}
+
+	return NULL;
 }
 
 template <class Key, class T>
@@ -89,11 +115,20 @@ bool HashTable<Key,T>::keyExists(Key k){
 	int place = hash(k);
 	int index = place % backingArraySize;
 	
-	if (backingArray[index].k == k && backingArray[index].isDel == false){
-		return true;
+	int i = index;
+		
+	while (backingArray[i].isNull == false){
+		
+		if (backingArray[index].k == k && backingArray[index].isDel == false){
+			return true;
+		}
+	
+		else {
+			i = i + 1;			
+		}
 	}
 
- 	return false;
+	return false;
 
 }
 
